@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Discount Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
+    .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    input, select { width: 100%; padding: 10px; margin: 10px 0; font-size: 1rem; }
+    button { padding: 10px 20px; font-size: 1rem; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    .result { margin-top: 20px; font-weight: bold; }
+    .lang-switcher { margin-top: 10px; }
+    #taxSection { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 id="title">Discount Calculator</h2>
+
+    <label id="label-original">Original Price:</label>
+    <input type="number" id="originalPrice" placeholder="e.g. 1000" />
+
+    <label id="label-discount">Discounts (%, ₹):</label>
+    <input type="text" id="discounts" placeholder="e.g. 20% + 100" />
+
+    <label><input type="checkbox" id="applyGST" onchange="toggleGST()"> <span id="label-apply">Apply GST</span></label>
+
+    <div id="taxSection">
+      <label id="label-tax">Tax/GST (%):</label>
+      <input type="number" id="tax" placeholder="e.g. 18" />
+    </div>
+
+    <label id="label-currency">Currency:</label>
+    <select id="currency">
+      <option value="₹">₹ INR</option>
+      <option value="$">$ USD</option>
+      <option value="€">€ EUR</option>
+    </select>
+
+    <button onclick="calculateDiscount()">Calculate</button>
+
+    <div class="result" id="result">Final Price: </div>
+
+    <div class="lang-switcher">
+      🌐 <label for="language">Language:</label>
+      <select id="language" onchange="changeLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="te">తెలుగు</option>
+        <option value="hi">हिंदी</option>
+        <option value="ta">தமிழ்</option>
+        <option value="es">Español</option>
+      </select>
+    </div>
+  </div>
+
+  <script>
+    const texts = {
+      en: {
+        title: "Discount Calculator",
+        original: "Original Price:",
+        discount: "Discounts (%, ₹):",
+        tax: "Tax/GST (%):",
+        apply: "Apply GST",
+        currency: "Currency:",
+      },
+      te: {
+        title: "డిస్కౌంట్ కాలిక్యులేటర్",
+        original: "అసలు ధర:",
+        discount: "డిస్కౌంట్లు (%, ₹):",
+        tax: "పన్ను / జిఎస్టి (%):",
+        apply: "జిఎస్టిని వర్తింపజేయండి",
+        currency: "కరెన్సీ:",
+      },
+      hi: {
+        title: "डिस्काउंट कैलकुलेटर",
+        original: "मूल्य:",
+        discount: "छूटें (%, ₹):",
+        tax: "टैक्स / जीएसटी (%):",
+        apply: "जीएसटी लागू करें",
+        currency: "मुद्रा:",
+      },
+      ta: {
+        title: "தள்ளுபடி கணிப்பான்",
+        original: "மூல விலை:",
+        discount: "தள்ளுபடிகள் (%, ₹):",
+        tax: "வரி / ஜிஎஸ்டி (%):",
+        apply: "ஜிஎஸ்டி சேர்",
+        currency: "நாணயம்:",
+      },
+      es: {
+        title: "Calculadora de Descuentos",
+        original: "Precio Original:",
+        discount: "Descuentos (%, ₹):",
+        tax: "Impuesto / GST (%):",
+        apply: "Aplicar GST",
+        currency: "Moneda:",
+      }
+    };
+
+    function changeLanguage(lang) {
+      document.getElementById("title").textContent = texts[lang].title;
+      document.getElementById("label-original").textContent = texts[lang].original;
+      document.getElementById("label-discount").textContent = texts[lang].discount;
+      document.getElementById("label-tax").textContent = texts[lang].tax;
+      document.getElementById("label-currency").textContent = texts[lang].currency;
+      document.getElementById("label-apply").textContent = texts[lang].apply;
+    }
+
+    function toggleGST() {
+      const taxSection = document.getElementById("taxSection");
+      taxSection.style.display = document.getElementById("applyGST").checked ? "block" : "none";
+    }
+
+    function calculateDiscount() {
+      let originalPrice = parseFloat(document.getElementById("originalPrice").value);
+      let discountInput = document.getElementById("discounts").value;
+      let applyGST = document.getElementById("applyGST").checked;
+      let tax = applyGST ? (parseFloat(document.getElementById("tax").value) || 0) : 0;
+      let currency = document.getElementById("currency").value;
+
+      if (isNaN(originalPrice)) {
+        document.getElementById("result").textContent = "Please enter a valid original price.";
+        return;
+      }
+
+      let discounts = discountInput.split('+').map(x => x.trim());
+
+      discounts.forEach(d => {
+        if (d.endsWith('%')) {
+          let percent = parseFloat(d.replace('%', '')) || 0;
+          originalPrice -= (originalPrice * percent / 100);
+        } else {
+          let flat = parseFloat(d) || 0;
+          originalPrice -= flat;
+        }
+      });
+
+      if (applyGST) {
+        originalPrice += originalPrice * tax / 100;
+      }
+
+      document.getElementById("result").textContent = `Final Price: ${currency} ${originalPrice.toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>
