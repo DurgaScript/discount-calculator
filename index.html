@@ -35,15 +35,13 @@
       margin-top: 5px;
     }
     .checkbox-row {
-      display: flex;
-      align-items: center;
       margin-top: 15px;
     }
-    .checkbox-row input {
-      margin-right: 10px;
-    }
     .checkbox-row label {
-      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
     }
     button {
       width: 100%;
@@ -76,8 +74,10 @@
     <input type="number" id="discountAmount" placeholder="e.g. 100" />
 
     <div class="checkbox-row">
-      <input type="checkbox" id="applyGST" />
-      <label for="applyGST" id="applyGSTLabel">Apply GST</label>
+      <label id="applyGSTLabel">
+        <input type="checkbox" id="applyGST" />
+        Apply GST
+      </label>
     </div>
 
     <label for="currency" id="label-currency">Currency:</label>
@@ -90,6 +90,7 @@
     <button onclick="calculate()" id="calculateBtn">Calculate</button>
 
     <div class="result" id="result"></div>
+    <div class="result" id="savings"></div>
 
     <label for="language" id="label-language">🌐 Language:</label>
     <select id="language" onchange="updateLanguage()">
@@ -107,23 +108,27 @@
       const applyGst = document.getElementById("applyGST").checked;
       const currency = document.getElementById("currency").value;
 
-      let discounted = original;
+      let discountValue = 0;
 
       if (percent > 0) {
-        discounted = original - (original * (percent / 100));
+        discountValue = original * (percent / 100);
       }
 
       if (amount > 0) {
-        discounted = original - amount;
+        discountValue = amount;
       }
+
+      let final = original - discountValue;
 
       if (applyGst) {
-        discounted += discounted * 0.18;
+        final += final * 0.18;
       }
 
-      discounted = Math.max(0, discounted).toFixed(2);
+      final = Math.max(0, final).toFixed(2);
+      discountValue = Math.min(original, discountValue).toFixed(2);
 
-      document.getElementById("result").innerText = `${translations[currentLang].finalPrice} ${currency} ${discounted}`;
+      document.getElementById("result").innerText = `${translations[currentLang].finalPrice} ${currency} ${final}`;
+      document.getElementById("savings").innerText = `${translations[currentLang].youSaved} ${currency} ${discountValue}`;
     }
 
     const translations = {
@@ -136,6 +141,7 @@
         currency: "Currency:",
         calculate: "Calculate",
         finalPrice: "Final Price:",
+        youSaved: "You saved:",
         language: "Language:"
       },
       hi: {
@@ -147,6 +153,7 @@
         currency: "मुद्रा:",
         calculate: "गणना करें",
         finalPrice: "अंतिम मूल्य:",
+        youSaved: "आपने बचाया:",
         language: "भाषा:"
       },
       te: {
@@ -158,6 +165,7 @@
         currency: "కరెన్సీ:",
         calculate: "లెక్కించు",
         finalPrice: "చివరి ధర:",
+        youSaved: "మీరు సేవ్ చేసిన మొత్తం:",
         language: "భాష:"
       }
     };
