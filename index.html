@@ -1,298 +1,178 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Discount Calculator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <title>Universal Discount Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
-      padding: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #f0f4ff, #e0e6ff);
+      background: #f5f7fa;
+      color: #333;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      min-height: 100vh;
-    }
+      padding: 2rem;
+      transition: background 0.5s ease-in-out;
+    }h1 {
+  margin-bottom: 1rem;
+}
 
-    .container {
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-      padding: 30px;
-      width: 100%;
-      max-width: 420px;
-      position: relative;
-    }
+.calculator {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+}
 
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      font-weight: 600;
-      color: #2c3e50;
-    }
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+}
 
-    .input-group {
-      position: relative;
-      margin-bottom: 20px;
-    }
+.row label {
+  flex: 1;
+}
 
-    .input-group input, .input-group select {
-      width: 100%;
-      padding: 14px 45px 14px 15px;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      background: #f0f0f0;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-    }
+.row input, .row select {
+  flex: 2;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+}
 
-    .input-group .suffix {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #555;
-      font-size: 16px;
-    }
+#result {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #e9f7ef;
+  border-left: 5px solid #2ecc71;
+  border-radius: 6px;
+}
 
-    .toggle-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
+.time-display {
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  color: #555;
+}
 
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 48px;
-      height: 24px;
-    }
+.occasion-banner {
+  font-weight: bold;
+  color: #e74c3c;
+  margin-bottom: 1rem;
+  text-align: center;
+}
 
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
+/* Theme styles */
+.new-year-theme {
+  background: url('https://i.imgur.com/YOUR_FIREWORKS_IMAGE.gif') center/cover no-repeat;
+}
 
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0;
-      right: 0; bottom: 0;
-      background-color: #ccc;
-      transition: 0.4s;
-      border-radius: 24px;
-    }
+.christmas-theme {
+  background: linear-gradient(#fff, #e6f7ff);
+}
 
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: 0.4s;
-      border-radius: 50%;
-    }
+.valentine-theme {
+  background: linear-gradient(#ffe6e6, #ffcccc);
+}
 
-    input:checked + .slider {
-      background-color: #27ae60;
-    }
-
-    input:checked + .slider:before {
-      transform: translateX(24px);
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      transition: 0.3s ease;
-    }
-
-    button:hover {
-      background: #0056b3;
-    }
-
-    .result {
-      margin-top: 20px;
-      text-align: center;
-      font-size: 18px;
-      font-weight: 600;
-      color: #2d3436;
-    }
-
-    .language-button {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background: none;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    /* Modal */
-    .modal {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 25px;
-      border-radius: 15px;
-      text-align: center;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-
-    .modal-content h3 {
-      margin-bottom: 15px;
-    }
-
-    .modal-content button {
-      margin: 5px;
-      padding: 10px 20px;
-      border-radius: 8px;
-      border: none;
-      font-size: 15px;
-      background: #007bff;
-      color: white;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
-
-    .modal-content button:hover {
-      background: #0056b3;
-    }
-
-    @media (max-width: 500px) {
-      .container {
-        margin: 20px;
-      }
-    }
   </style>
 </head>
 <body>
-
-<!-- 🌐 Language Modal -->
-<div class="modal" id="languageModal">
-  <div class="modal-content">
-    <h3>Select Language</h3>
-    <button onclick="setLanguage('en')">English</button>
-    <button onclick="setLanguage('te')">తెలుగు</button>
-    <button onclick="setLanguage('hi')">हिन्दी</button>
-    <button onclick="setLanguage('ta')">தமிழ்</button>
-  </div>
-</div>
-
-<div class="container">
-  <button class="language-button" onclick="document.getElementById('languageModal').style.display='flex'">🌐</button>
-  <h2 id="title">Discount Calculator</h2>
-
-  <div class="input-group">
-    <select id="currency" onchange="updateCurrencySymbol()">
-      <option value="₹">₹ - INR</option>
-      <option value="$">$ - USD</option>
-      <option value="€">€ - EUR</option>
-    </select>
-  </div>
-
-  <div class="input-group">
-    <input type="number" id="price" placeholder="Original Price" />
-    <span class="suffix" id="currencySymbol">₹</span>
-  </div>
-
-  <div class="input-group">
-    <input type="number" id="discount" placeholder="Discount" />
-    <span class="suffix">%</span>
-  </div>
-
-  <div class="toggle-row">
-    <label for="gstToggle">Apply GST</label>
-    <label class="switch">
-      <input type="checkbox" id="gstToggle" onchange="toggleGST()" />
-      <span class="slider"></span>
-    </label>
-  </div>
-
-  <div class="input-group" id="gstBox" style="display: none;">
-    <input type="number" id="gst" placeholder="GST %" value="18" />
-    <span class="suffix">%</span>
-  </div>
-
-  <button onclick="calculate()">Calculate</button>
-
-  <div class="result" id="result"></div>
-</div>
-
-<script>
-  // Language Modal
-  function setLanguage(lang) {
-    const titles = {
-      en: "Discount Calculator",
-      te: "డిస్కౌంట్ కాలిక్యులేటర్",
-      hi: "छूट कैलकुलेटर",
-      ta: "தள்ளுபடி கால்குலேட்டர்"
+  <h1>Universal Discount Calculator</h1>
+  <div class="occasion-banner" id="occasionBanner"></div>
+  <div class="time-display" id="timeDisplay"></div>
+  <div class="calculator">
+    <div class="row">
+      <label for="currency">Currency:</label>
+      <select id="currency">
+        <option value="₹">₹</option>
+        <option value="$">$</option>
+        <option value="€">€</option>
+        <option value="¥">¥</option>
+      </select>
+    </div>
+    <div class="row">
+      <label for="originalPrice">Original Price:</label>
+      <input type="number" id="originalPrice" />
+    </div>
+    <div class="row">
+      <label for="discountPercent">Discount %:</label>
+      <input type="number" id="discountPercent" />
+    </div>
+    <div class="row">
+      <label for="flatDiscount">Flat Discount:</label>
+      <input type="number" id="flatDiscount" />
+    </div>
+    <div class="row">
+      <label for="gstToggle">Apply GST:</label>
+      <input type="checkbox" id="gstToggle" />
+    </div>
+    <div class="row" id="gstRow" style="display: none;">
+      <label for="gstPercent">GST %:</label>
+      <input type="number" id="gstPercent" />
+    </div>
+    <button onclick="calculateDiscount()">Calculate</button>
+    <div id="result"></div>
+  </div>  <script>
+    const themes = {
+      "01-01": { name: "Happy New Year 🎉", class: "new-year-theme" },
+      "12-25": { name: "Merry Christmas 🎄", class: "christmas-theme" },
+      "02-14": { name: "Happy Valentine's Day ❤️", class: "valentine-theme" }
     };
-    document.getElementById("title").innerText = titles[lang] || "Discount Calculator";
-    document.getElementById("languageModal").style.display = "none";
-  }
 
-  // Toggle GST
-  function toggleGST() {
-    const gstBox = document.getElementById("gstBox");
-    gstBox.style.display = document.getElementById("gstToggle").checked ? "block" : "none";
-  }
-
-  // Currency symbol update
-  function updateCurrencySymbol() {
-    document.getElementById("currencySymbol").innerText = document.getElementById("currency").value;
-  }
-
-  // Main calculation
-  function calculate() {
-    const price = parseFloat(document.getElementById("price").value) || 0;
-    const discount = parseFloat(document.getElementById("discount").value) || 0;
-    const gst = document.getElementById("gstToggle").checked
-                ? parseFloat(document.getElementById("gst").value) || 0
-                : 0;
-    const currency = document.getElementById("currency").value;
-
-    let finalPrice = price - (price * discount / 100);
-    if (gst > 0) {
-      finalPrice += finalPrice * gst / 100;
+    function updateTime() {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString(undefined, { day: '2-digit', month: 'long', year: 'numeric' });
+      const timeStr = now.toLocaleTimeString();
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const offset = -now.getTimezoneOffset();
+      const offsetHours = Math.floor(offset / 60);
+      const offsetMins = offset % 60;
+      const gmt = `GMT${offset >= 0 ? '+' : '-'}${String(Math.abs(offsetHours)).padStart(2, '0')}:${String(Math.abs(offsetMins)).padStart(2, '0')}`;
+      document.getElementById('timeDisplay').textContent = `🗓️ ${dateStr} — ${timeStr} (${gmt} ${timezone})`;
     }
 
-    document.getElementById("result").innerText = `Final Price: ${currency}${finalPrice.toFixed(2)}`;
-  }
+    function applyOccasionTheme() {
+      const today = new Date();
+      const key = `${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      if (themes[key]) {
+        document.body.classList.add(themes[key].class);
+        document.getElementById('occasionBanner').textContent = themes[key].name;
+      }
+    }
 
-  // Auto-open language modal on load
-  window.onload = function() {
-    document.getElementById("languageModal").style.display = "flex";
-  };
-</script>
+    function calculateDiscount() {
+      const currency = document.getElementById('currency').value;
+      const original = parseFloat(document.getElementById('originalPrice').value) || 0;
+      const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
+      const flatDiscount = parseFloat(document.getElementById('flatDiscount').value) || 0;
+      const gstApplied = document.getElementById('gstToggle').checked;
+      const gstPercent = gstApplied ? parseFloat(document.getElementById('gstPercent').value) || 0 : 0;
 
-</body>
+      const discountAmount = (original * discountPercent) / 100 + flatDiscount;
+      const priceAfterDiscount = original - discountAmount;
+      const gstAmount = (priceAfterDiscount * gstPercent) / 100;
+      const finalPrice = priceAfterDiscount + gstAmount;
+
+      document.getElementById('result').innerHTML = `
+        <strong>Final Price:</strong> ${currency}${finalPrice.toFixed(2)}<br>
+        <strong>You Saved:</strong> ${currency}${discountAmount.toFixed(2)}<br>
+        ${gstApplied ? `<strong>GST Added:</strong> ${currency}${gstAmount.toFixed(2)}` : ''}
+      `;
+    }
+
+    document.getElementById('gstToggle').addEventListener('change', function () {
+      document.getElementById('gstRow').style.display = this.checked ? 'flex' : 'none';
+    });
+
+    setInterval(updateTime, 1000);
+    updateTime();
+    applyOccasionTheme();
+  </script></body>
 </html>
