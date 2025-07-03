@@ -2,53 +2,58 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Discount Calculator</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
+      font-family: 'Arial Rounded MT Bold', sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      background: #f6f6f6;
     }
     .container {
-      max-width: 500px;
-      margin: auto;
+      max-width: 400px;
+      margin: 40px auto;
       background: white;
-      padding: 20px;
+      padding: 25px;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     h2 {
       text-align: center;
+      margin-bottom: 20px;
     }
     label {
       display: block;
-      margin-top: 10px;
+      margin-top: 15px;
+      font-size: 16px;
     }
     input, select {
       width: 100%;
       padding: 10px;
-      margin-top: 5px;
       font-size: 16px;
+      margin-top: 5px;
     }
     .checkbox-row {
       display: flex;
       align-items: center;
-      margin-top: 10px;
+      margin-top: 15px;
+    }
+    .checkbox-row input {
+      margin-right: 10px;
     }
     .checkbox-row label {
-      margin: 0 0 0 10px;
+      margin: 0;
     }
     button {
       width: 100%;
       padding: 12px;
       margin-top: 20px;
-      background: #007bff;
+      background-color: #007bff;
       color: white;
-      font-size: 16px;
       border: none;
-      border-radius: 5px;
+      font-size: 16px;
+      border-radius: 6px;
     }
     .result {
       margin-top: 15px;
@@ -59,32 +64,39 @@
 </head>
 <body>
   <div class="container">
-    <h2>Discount Calculator</h2>
+    <h2 id="title">Discount Calculator</h2>
 
-    <label>Original Price:</label>
+    <label for="originalPrice" id="label-originalPrice">Original Price:</label>
     <input type="number" id="originalPrice" placeholder="e.g. 1000" />
 
-    <label>Discount (%):</label>
+    <label for="discountPercent" id="label-discountPercent">Discount (%):</label>
     <input type="number" id="discountPercent" placeholder="e.g. 20" />
 
-    <label>Discount (₹):</label>
+    <label for="discountAmount" id="label-discountAmount">Discount (₹):</label>
     <input type="number" id="discountAmount" placeholder="e.g. 100" />
 
     <div class="checkbox-row">
-      <input type="checkbox" id="applyGst" />
-      <label for="applyGst">Apply GST</label>
+      <input type="checkbox" id="applyGST" />
+      <label for="applyGST" id="applyGSTLabel">Apply GST</label>
     </div>
 
-    <label>Currency:</label>
+    <label for="currency" id="label-currency">Currency:</label>
     <select id="currency">
       <option value="₹">₹ INR</option>
       <option value="$">$ USD</option>
       <option value="€">€ EUR</option>
     </select>
 
-    <button onclick="calculate()">Calculate</button>
+    <button onclick="calculate()" id="calculateBtn">Calculate</button>
 
     <div class="result" id="result"></div>
+
+    <label for="language" id="label-language">🌐 Language:</label>
+    <select id="language" onchange="updateLanguage()">
+      <option value="en">English</option>
+      <option value="hi">हिंदी</option>
+      <option value="te">తెలుగు</option>
+    </select>
   </div>
 
   <script>
@@ -92,15 +104,17 @@
       const original = parseFloat(document.getElementById("originalPrice").value) || 0;
       const percent = parseFloat(document.getElementById("discountPercent").value) || 0;
       const amount = parseFloat(document.getElementById("discountAmount").value) || 0;
-      const applyGst = document.getElementById("applyGst").checked;
+      const applyGst = document.getElementById("applyGST").checked;
       const currency = document.getElementById("currency").value;
 
       let discounted = original;
+
       if (percent > 0) {
-        discounted -= original * (percent / 100);
+        discounted = original - (original * (percent / 100));
       }
+
       if (amount > 0) {
-        discounted -= amount;
+        discounted = original - amount;
       }
 
       if (applyGst) {
@@ -109,8 +123,62 @@
 
       discounted = Math.max(0, discounted).toFixed(2);
 
-      document.getElementById("result").innerText = `Final Price: ${currency} ${discounted}`;
+      document.getElementById("result").innerText = `${translations[currentLang].finalPrice} ${currency} ${discounted}`;
     }
+
+    const translations = {
+      en: {
+        title: "Discount Calculator",
+        originalPrice: "Original Price:",
+        discountPercent: "Discount (%):",
+        discountAmount: "Discount (₹):",
+        applyGST: "Apply GST",
+        currency: "Currency:",
+        calculate: "Calculate",
+        finalPrice: "Final Price:",
+        language: "Language:"
+      },
+      hi: {
+        title: "छूट कैलकुलेटर",
+        originalPrice: "मूल मूल्य:",
+        discountPercent: "छूट (%):",
+        discountAmount: "छूट (₹):",
+        applyGST: "GST जोड़ें",
+        currency: "मुद्रा:",
+        calculate: "गणना करें",
+        finalPrice: "अंतिम मूल्य:",
+        language: "भाषा:"
+      },
+      te: {
+        title: "డిస్కౌంట్ కాలిక్యులేటర్",
+        originalPrice: "అసలు ధర:",
+        discountPercent: "డిస్కౌంట్ (%):",
+        discountAmount: "డిస్కౌంట్ (₹):",
+        applyGST: "GST వర్తించు",
+        currency: "కరెన్సీ:",
+        calculate: "లెక్కించు",
+        finalPrice: "చివరి ధర:",
+        language: "భాష:"
+      }
+    };
+
+    let currentLang = "en";
+
+    function updateLanguage() {
+      currentLang = document.getElementById("language").value;
+      const t = translations[currentLang];
+
+      document.getElementById("title").innerText = t.title;
+      document.getElementById("label-originalPrice").innerText = t.originalPrice;
+      document.getElementById("label-discountPercent").innerText = t.discountPercent;
+      document.getElementById("label-discountAmount").innerText = t.discountAmount;
+      document.getElementById("applyGSTLabel").innerText = t.applyGST;
+      document.getElementById("label-currency").innerText = t.currency;
+      document.getElementById("calculateBtn").innerText = t.calculate;
+      document.getElementById("label-language").innerText = "🌐 " + t.language;
+    }
+
+    updateLanguage(); // Set default language
   </script>
 </body>
 </html>
