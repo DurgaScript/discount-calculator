@@ -11,14 +11,12 @@
       --text: #333;
       --bg: #ffffff;
     }
-
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       background-color: var(--accent);
       color: var(--text);
     }
-
     .container {
       max-width: 600px;
       background: var(--bg);
@@ -27,24 +25,25 @@
       border-radius: 16px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
-
     h1 {
       text-align: center;
       margin-bottom: 1rem;
     }
-
+    #datetime {
+      text-align: right;
+      font-size: 0.9rem;
+      color: #666;
+    }
     label {
       font-weight: 600;
       display: block;
       margin-top: 1rem;
     }
-
     .input-group {
       display: flex;
       align-items: center;
       margin-top: 0.5rem;
     }
-
     .input-group input,
     .input-group select {
       padding: 10px;
@@ -53,35 +52,29 @@
       border-radius: 8px;
       flex: 1;
     }
-
     .input-group select.currency {
       max-width: 80px;
       margin-left: 8px;
     }
-
     .toggle-container {
       display: flex;
       align-items: center;
       margin-top: 1.5rem;
     }
-
     .toggle-label {
       margin-right: 10px;
     }
-
     .switch {
       position: relative;
       display: inline-block;
       width: 50px;
       height: 24px;
     }
-
     .switch input {
       opacity: 0;
       width: 0;
       height: 0;
     }
-
     .slider {
       position: absolute;
       cursor: pointer;
@@ -93,7 +86,6 @@
       transition: .4s;
       border-radius: 34px;
     }
-
     .slider:before {
       position: absolute;
       content: "";
@@ -105,22 +97,18 @@
       transition: .4s;
       border-radius: 50%;
     }
-
     input:checked + .slider {
       background-color: var(--primary);
     }
-
     input:checked + .slider:before {
       transform: translateX(26px);
     }
-
     .buttons {
       margin-top: 20px;
       display: flex;
       gap: 10px;
       justify-content: center;
     }
-
     .buttons button {
       flex: 1;
       padding: 10px;
@@ -132,24 +120,20 @@
       cursor: pointer;
       transition: background 0.3s;
     }
-
     .buttons button:hover {
       background-color: #357ABD;
     }
-
     .result {
       text-align: center;
       margin-top: 20px;
       font-size: 1.2rem;
       font-weight: bold;
     }
-
     @media (max-width: 600px) {
       .container {
         margin: 20px;
         padding: 15px;
       }
-
       .buttons button {
         font-size: 0.9rem;
       }
@@ -158,6 +142,7 @@
 </head>
 <body>
   <div class="container">
+    <div id="datetime"></div>
     <h1>Universal Discount Tool</h1>
 
     <label for="original">Original Price</label>
@@ -203,6 +188,23 @@
   </div>
 
   <script>
+    function updateDateTime() {
+      const now = new Date();
+      const options = {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZoneName: 'short'
+      };
+      document.getElementById("datetime").innerText = now.toLocaleString(undefined, options);
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
     function toggleGstInput() {
       const gstInput = document.getElementById("gstInputSection");
       gstInput.style.display = document.getElementById("toggleGST").checked ? "block" : "none";
