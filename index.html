@@ -3,93 +3,96 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Universal Discount Calculator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
+      font-family: 'Inter', sans-serif;
       margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #f5f7fa;
-      color: #333;
+      padding: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 1rem;
+      background: linear-gradient(to bottom, #f0f4f8, #d9e2ec);
+      transition: background 0.5s ease;
+    }
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+    .date-time {
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    .calculator {
+      background: #ffffffcc;
+      border-radius: 1rem;
       padding: 2rem;
-      transition: background 0.5s ease-in-out;
-    }h1 {
-  margin-bottom: 1rem;
-}
-
-.calculator {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
-  width: 100%;
-}
-
-.row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-  justify-content: space-between;
-}
-
-.row label {
-  flex: 1;
-}
-
-.row input, .row select {
-  flex: 2;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 100%;
-}
-
-#result {
-  margin-top: 1rem;
-  padding: 1rem;
-  background: #e9f7ef;
-  border-left: 5px solid #2ecc71;
-  border-radius: 6px;
-}
-
-.time-display {
-  margin: 1rem 0;
-  font-size: 0.9rem;
-  color: #555;
-}
-
-.occasion-banner {
-  font-weight: bold;
-  color: #e74c3c;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-/* Theme styles */
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+    }
+    input[type="number"], select {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 1rem;
+      font-weight: bold;
+      text-align: center;
+    }
+    .special-banner {
+      background-color: gold;
+      color: black;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      text-align: center;
+    }/* Themes */
 .new-year-theme {
-  background: url('https://i.imgur.com/YOUR_FIREWORKS_IMAGE.gif') center/cover no-repeat;
+  background: linear-gradient(to right, #1c92d2, #f2fcfe);
 }
-
-.christmas-theme {
-  background: linear-gradient(#fff, #e6f7ff);
-}
-
 .valentine-theme {
-  background: linear-gradient(#ffe6e6, #ffcccc);
+  background: linear-gradient(to right, #fbd3e9, #bb377d);
+}
+.christmas-theme {
+  background: linear-gradient(to right, #83a4d4, #b6fbff);
+}
+.independence-theme {
+  background: linear-gradient(to right, orange, white, green);
 }
 
   </style>
 </head>
 <body>
   <h1>Universal Discount Calculator</h1>
-  <div class="occasion-banner" id="occasionBanner"></div>
-  <div class="time-display" id="timeDisplay"></div>
-  <div class="calculator">
-    <div class="row">
-      <label for="currency">Currency:</label>
+  <div class="date-time" id="dateTimeDisplay"></div>
+  <div id="specialBanner" class="special-banner" style="display:none;"></div>  <div class="calculator">
+    <div class="form-group">
+      <label for="currency">Currency</label>
       <select id="currency">
         <option value="₹">₹</option>
         <option value="$">$</option>
@@ -97,82 +100,71 @@
         <option value="¥">¥</option>
       </select>
     </div>
-    <div class="row">
-      <label for="originalPrice">Original Price:</label>
-      <input type="number" id="originalPrice" />
+    <div class="form-group">
+      <label for="price">Original Price</label>
+      <input type="number" id="price" placeholder="Enter original price" />
     </div>
-    <div class="row">
-      <label for="discountPercent">Discount %:</label>
-      <input type="number" id="discountPercent" />
+    <div class="form-group">
+      <label for="discount">Discount (%)</label>
+      <input type="number" id="discount" placeholder="e.g. 30" />
     </div>
-    <div class="row">
-      <label for="flatDiscount">Flat Discount:</label>
-      <input type="number" id="flatDiscount" />
+    <div class="form-group">
+      <label for="flatDiscount">Flat Discount</label>
+      <input type="number" id="flatDiscount" placeholder="e.g. 200" />
     </div>
-    <div class="row">
-      <label for="gstToggle">Apply GST:</label>
-      <input type="checkbox" id="gstToggle" />
-    </div>
-    <div class="row" id="gstRow" style="display: none;">
-      <label for="gstPercent">GST %:</label>
-      <input type="number" id="gstPercent" />
+    <div class="form-group">
+      <label><input type="checkbox" id="applyGstToggle" /> Apply GST?</label>
+      <input type="number" id="gst" placeholder="Enter GST %" style="display:none; margin-top: 0.5rem;" />
     </div>
     <button onclick="calculateDiscount()">Calculate</button>
-    <div id="result"></div>
+    <div class="result" id="resultDisplay"></div>
   </div>  <script>
-    const themes = {
-      "01-01": { name: "Happy New Year 🎉", class: "new-year-theme" },
-      "12-25": { name: "Merry Christmas 🎄", class: "christmas-theme" },
-      "02-14": { name: "Happy Valentine's Day ❤️", class: "valentine-theme" }
-    };
-
-    function updateTime() {
+    function updateDateTime() {
       const now = new Date();
-      const dateStr = now.toLocaleDateString(undefined, { day: '2-digit', month: 'long', year: 'numeric' });
-      const timeStr = now.toLocaleTimeString();
-      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const offset = -now.getTimezoneOffset();
-      const offsetHours = Math.floor(offset / 60);
-      const offsetMins = offset % 60;
-      const gmt = `GMT${offset >= 0 ? '+' : '-'}${String(Math.abs(offsetHours)).padStart(2, '0')}:${String(Math.abs(offsetMins)).padStart(2, '0')}`;
-      document.getElementById('timeDisplay').textContent = `🗓️ ${dateStr} — ${timeStr} (${gmt} ${timezone})`;
+      const options = { timeZoneName: 'short', hour12: true };
+      const timeString = now.toLocaleTimeString(undefined, options);
+      const dateString = now.toLocaleDateString(undefined, { day: '2-digit', month: 'long', year: 'numeric' });
+      document.getElementById("dateTimeDisplay").innerText = `🗓️ ${dateString} — ${timeString}`;
     }
 
-    function applyOccasionTheme() {
-      const today = new Date();
-      const key = `${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-      if (themes[key]) {
-        document.body.classList.add(themes[key].class);
-        document.getElementById('occasionBanner').textContent = themes[key].name;
-      }
-    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
 
-    function calculateDiscount() {
-      const currency = document.getElementById('currency').value;
-      const original = parseFloat(document.getElementById('originalPrice').value) || 0;
-      const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
-      const flatDiscount = parseFloat(document.getElementById('flatDiscount').value) || 0;
-      const gstApplied = document.getElementById('gstToggle').checked;
-      const gstPercent = gstApplied ? parseFloat(document.getElementById('gstPercent').value) || 0 : 0;
-
-      const discountAmount = (original * discountPercent) / 100 + flatDiscount;
-      const priceAfterDiscount = original - discountAmount;
-      const gstAmount = (priceAfterDiscount * gstPercent) / 100;
-      const finalPrice = priceAfterDiscount + gstAmount;
-
-      document.getElementById('result').innerHTML = `
-        <strong>Final Price:</strong> ${currency}${finalPrice.toFixed(2)}<br>
-        <strong>You Saved:</strong> ${currency}${discountAmount.toFixed(2)}<br>
-        ${gstApplied ? `<strong>GST Added:</strong> ${currency}${gstAmount.toFixed(2)}` : ''}
-      `;
-    }
-
-    document.getElementById('gstToggle').addEventListener('change', function () {
-      document.getElementById('gstRow').style.display = this.checked ? 'flex' : 'none';
+    const applyGstToggle = document.getElementById("applyGstToggle");
+    applyGstToggle.addEventListener("change", () => {
+      document.getElementById("gst").style.display = applyGstToggle.checked ? "block" : "none";
     });
 
-    setInterval(updateTime, 1000);
-    updateTime();
-    applyOccasionTheme();
+    function calculateDiscount() {
+      const price = parseFloat(document.getElementById("price").value);
+      const discount = parseFloat(document.getElementById("discount").value) || 0;
+      const flat = parseFloat(document.getElementById("flatDiscount").value) || 0;
+      const gstPercent = applyGstToggle.checked ? parseFloat(document.getElementById("gst").value) || 0 : 0;
+      const currency = document.getElementById("currency").value;
+
+      let discountedPrice = price - (price * discount / 100) - flat;
+      let gstAmount = discountedPrice * gstPercent / 100;
+      let finalPrice = discountedPrice + gstAmount;
+
+      document.getElementById("resultDisplay").innerText =
+        `${currency}${finalPrice.toFixed(2)} (You saved: ${currency}${(price - discountedPrice).toFixed(2)}, GST: ${currency}${gstAmount.toFixed(2)})`;
+    }
+
+    // Special theme logic
+    const themes = {
+      "01-01": { name: "Happy New Year!", class: "new-year-theme" },
+      "02-14": { name: "Happy Valentine's Day!", class: "valentine-theme" },
+      "12-25": { name: "Merry Christmas!", class: "christmas-theme" },
+      "08-15": { name: "Happy Independence Day!", class: "independence-theme" }
+    };
+
+    const today = new Date();
+    const key = `${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    if (themes[key]) {
+      document.body.classList.add(themes[key].class);
+      const banner = document.getElementById("specialBanner");
+      banner.innerText = themes[key].name;
+      banner.style.display = "block";
+    }
   </script></body>
 </html>
