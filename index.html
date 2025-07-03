@@ -2,71 +2,56 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Discount Calculator</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f2f2f2;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
       margin: 0;
       padding: 20px;
     }
-
     .container {
-      max-width: 400px;
+      max-width: 500px;
       margin: auto;
-      background-color: #fff;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-
-    h1 {
+    h2 {
       text-align: center;
-      font-size: 1.6em;
-      margin-bottom: 20px;
     }
-
     label {
       display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
+      margin-top: 10px;
     }
-
-    input[type="number"], select {
+    input, select {
       width: 100%;
       padding: 10px;
-      margin-bottom: 15px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 1em;
+      margin-top: 5px;
+      font-size: 16px;
     }
-
     .checkbox-row {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 15px;
+      margin-top: 10px;
     }
-
+    .checkbox-row label {
+      margin: 0 0 0 10px;
+    }
     button {
       width: 100%;
       padding: 12px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 1em;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    .result {
       margin-top: 20px;
-      font-size: 1.2em;
+      background: #007bff;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+    }
+    .result {
+      margin-top: 15px;
       font-weight: bold;
       text-align: center;
     }
@@ -74,23 +59,23 @@
 </head>
 <body>
   <div class="container">
-    <h1>Discount Calculator</h1>
+    <h2>Discount Calculator</h2>
 
-    <label for="price">Original Price:</label>
-    <input type="number" id="price" placeholder="e.g. 1000" />
+    <label>Original Price:</label>
+    <input type="number" id="originalPrice" placeholder="e.g. 1000" />
 
-    <label for="discountPercent">Discount (%):</label>
+    <label>Discount (%):</label>
     <input type="number" id="discountPercent" placeholder="e.g. 20" />
 
-    <label for="discountAmount">Discount (₹):</label>
+    <label>Discount (₹):</label>
     <input type="number" id="discountAmount" placeholder="e.g. 100" />
 
     <div class="checkbox-row">
-      <input type="checkbox" id="gstCheck" />
-      <label for="gstCheck">Apply GST</label>
+      <input type="checkbox" id="applyGst" />
+      <label for="applyGst">Apply GST</label>
     </div>
 
-    <label for="currency">Currency:</label>
+    <label>Currency:</label>
     <select id="currency">
       <option value="₹">₹ INR</option>
       <option value="$">$ USD</option>
@@ -104,33 +89,27 @@
 
   <script>
     function calculate() {
-      const price = parseFloat(document.getElementById('price').value) || 0;
-      const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
-      const discountAmount = parseFloat(document.getElementById('discountAmount').value) || 0;
-      const applyGst = document.getElementById('gstCheck').checked;
-      const currency = document.getElementById('currency').value;
+      const original = parseFloat(document.getElementById("originalPrice").value) || 0;
+      const percent = parseFloat(document.getElementById("discountPercent").value) || 0;
+      const amount = parseFloat(document.getElementById("discountAmount").value) || 0;
+      const applyGst = document.getElementById("applyGst").checked;
+      const currency = document.getElementById("currency").value;
 
-      let discountedPrice = price;
-
-      // Apply percentage discount
-      if (discountPercent > 0) {
-        discountedPrice -= (price * discountPercent / 100);
+      let discounted = original;
+      if (percent > 0) {
+        discounted -= original * (percent / 100);
+      }
+      if (amount > 0) {
+        discounted -= amount;
       }
 
-      // Apply fixed amount discount
-      if (discountAmount > 0) {
-        discountedPrice -= discountAmount;
-      }
-
-      // Apply GST (assume 18%)
       if (applyGst) {
-        discountedPrice += discountedPrice * 0.18;
+        discounted += discounted * 0.18;
       }
 
-      discountedPrice = discountedPrice < 0 ? 0 : discountedPrice;
+      discounted = Math.max(0, discounted).toFixed(2);
 
-      document.getElementById('result').textContent =
-        `Final Price: ${currency} ${discountedPrice.toFixed(2)}`;
+      document.getElementById("result").innerText = `Final Price: ${currency} ${discounted}`;
     }
   </script>
 </body>
