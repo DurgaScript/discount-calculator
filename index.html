@@ -3,168 +3,183 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Universal Discount Calculator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Inter', sans-serif;
       margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      padding: 1rem;
-      background: linear-gradient(to bottom, #f0f4f8, #d9e2ec);
-      transition: background 0.5s ease;
-    }
-    h1 {
-      margin-bottom: 0.5rem;
-    }
-    .date-time {
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #f9f9f9, #eef1f5);
+      transition: background 0.5s;
       color: #333;
     }
-    .calculator {
-      background: #ffffffcc;
-      border-radius: 1rem;
-      padding: 2rem;
-      max-width: 400px;
-      width: 100%;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    header, footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #007acc;
+      color: white;
     }
-    .form-group {
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 12px;
+    }
+    h1 {
+      font-size: 1.8rem;
       margin-bottom: 1rem;
     }
     label {
       display: block;
-      margin-bottom: 0.3rem;
-      font-weight: 600;
+      margin: 0.8rem 0 0.2rem;
     }
-    input[type="number"], select {
+    input, select {
       width: 100%;
-      padding: 0.5rem;
+      padding: 0.6rem;
       font-size: 1rem;
-      border-radius: 0.5rem;
       border: 1px solid #ccc;
+      border-radius: 8px;
     }
     button {
-      width: 100%;
-      padding: 0.75rem;
+      margin-top: 1rem;
+      padding: 0.7rem 1.2rem;
       font-size: 1rem;
-      background-color: #007bff;
-      color: white;
       border: none;
-      border-radius: 0.5rem;
+      border-radius: 8px;
+      background-color: #007acc;
+      color: white;
       cursor: pointer;
     }
-    .result {
+    .toggle {
+      display: flex;
+      align-items: center;
       margin-top: 1rem;
-      font-weight: bold;
-      text-align: center;
     }
-    .special-banner {
-      background-color: gold;
-      color: black;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      margin: 1rem 0;
+    .toggle input {
+      margin-right: 0.5rem;
+    }
+    .result, .thankyou, .deal-feedback {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: #f0f8ff;
+      border-radius: 10px;
+      font-size: 1.1rem;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+    }
+    .datetime {
       text-align: center;
-    }/* Themes */
-.new-year-theme {
-  background: linear-gradient(to right, #1c92d2, #f2fcfe);
-}
-.valentine-theme {
-  background: linear-gradient(to right, #fbd3e9, #bb377d);
-}
-.christmas-theme {
-  background: linear-gradient(to right, #83a4d4, #b6fbff);
-}
-.independence-theme {
-  background: linear-gradient(to right, orange, white, green);
-}
-
+      margin-top: 1rem;
+      color: #666;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
-<body>
-  <h1>Universal Discount Calculator</h1>
-  <div class="date-time" id="dateTimeDisplay"></div>
-  <div id="specialBanner" class="special-banner" style="display:none;"></div>  <div class="calculator">
-    <div class="form-group">
-      <label for="currency">Currency</label>
-      <select id="currency">
-        <option value="₹">₹</option>
-        <option value="$">$</option>
-        <option value="€">€</option>
-        <option value="¥">¥</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="price">Original Price</label>
-      <input type="number" id="price" placeholder="Enter original price" />
-    </div>
-    <div class="form-group">
-      <label for="discount">Discount (%)</label>
-      <input type="number" id="discount" placeholder="e.g. 30" />
-    </div>
-    <div class="form-group">
-      <label for="flatDiscount">Flat Discount</label>
-      <input type="number" id="flatDiscount" placeholder="e.g. 200" />
-    </div>
-    <div class="form-group">
-      <label><input type="checkbox" id="applyGstToggle" /> Apply GST?</label>
-      <input type="number" id="gst" placeholder="Enter GST %" style="display:none; margin-top: 0.5rem;" />
-    </div>
-    <button onclick="calculateDiscount()">Calculate</button>
-    <div class="result" id="resultDisplay"></div>
-  </div>  <script>
-    function updateDateTime() {
-      const now = new Date();
-      const options = { timeZoneName: 'short', hour12: true };
-      const timeString = now.toLocaleTimeString(undefined, options);
-      const dateString = now.toLocaleDateString(undefined, { day: '2-digit', month: 'long', year: 'numeric' });
-      document.getElementById("dateTimeDisplay").innerText = `🗓️ ${dateString} — ${timeString}`;
+<body onload="showWelcome()">
+  <header>
+    <h1>Universal Discount Calculator</h1>
+  </header>  <div class="container">
+    <div id="welcome" class="result">👋 Welcome! Ready to save smart?</div><label for="currency">Currency:</label>
+<select id="currency">
+  <option value="₹">₹</option>
+  <option value="$">$</option>
+  <option value="€">€</option>
+  <option value="¥">¥</option>
+</select>
+
+<label for="originalPrice">Original Price:</label>
+<input type="number" id="originalPrice" placeholder="Enter price...">
+
+<label for="discountPercent">Discount (%)</label>
+<input type="number" id="discountPercent" placeholder="Enter % discount...">
+
+<label for="flatDiscount">Flat Discount</label>
+<input type="number" id="flatDiscount" placeholder="Enter flat discount...">
+
+<div class="toggle">
+  <input type="checkbox" id="applyGST" onchange="toggleGSTField()">
+  <label for="applyGST">Apply GST</label>
+</div>
+
+<div id="gstInput" style="display:none;">
+  <label for="gstPercent">GST (%)</label>
+  <input type="number" id="gstPercent" placeholder="Enter GST %">
+</div>
+
+<button onclick="calculateDiscount()">Calculate</button>
+
+<div id="result" class="result" style="display:none;"></div>
+<div id="thankyou" class="thankyou" style="display:none;">✅ Thanks for using the calculator!</div>
+<div id="dealFeedback" class="deal-feedback" style="display:none;"></div>
+
+<div class="btn-group">
+  <button onclick="window.print()">🖨️ Print</button>
+  <button onclick="shareApp()">🔗 Share</button>
+</div>
+
+<div class="datetime" id="datetime"></div>
+
+  </div>  <footer>
+    © 2025 DiscountTool | All rights reserved
+  </footer>  <script>
+    function showWelcome() {
+      setTimeout(() => {
+        document.getElementById('welcome').style.display = 'none';
+      }, 3000);
+      updateTime();
+      setInterval(updateTime, 60000);
     }
 
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
-
-    const applyGstToggle = document.getElementById("applyGstToggle");
-    applyGstToggle.addEventListener("change", () => {
-      document.getElementById("gst").style.display = applyGstToggle.checked ? "block" : "none";
-    });
+    function toggleGSTField() {
+      const gstBox = document.getElementById('gstInput');
+      gstBox.style.display = document.getElementById('applyGST').checked ? 'block' : 'none';
+    }
 
     function calculateDiscount() {
-      const price = parseFloat(document.getElementById("price").value);
-      const discount = parseFloat(document.getElementById("discount").value) || 0;
-      const flat = parseFloat(document.getElementById("flatDiscount").value) || 0;
-      const gstPercent = applyGstToggle.checked ? parseFloat(document.getElementById("gst").value) || 0 : 0;
-      const currency = document.getElementById("currency").value;
+      const currency = document.getElementById('currency').value;
+      const original = parseFloat(document.getElementById('originalPrice').value) || 0;
+      const percent = parseFloat(document.getElementById('discountPercent').value) || 0;
+      const flat = parseFloat(document.getElementById('flatDiscount').value) || 0;
+      const gstActive = document.getElementById('applyGST').checked;
+      const gstPercent = gstActive ? parseFloat(document.getElementById('gstPercent').value) || 0 : 0;
 
-      let discountedPrice = price - (price * discount / 100) - flat;
-      let gstAmount = discountedPrice * gstPercent / 100;
-      let finalPrice = discountedPrice + gstAmount;
+      let discounted = original - (original * percent / 100) - flat;
+      if (gstActive) discounted += discounted * (gstPercent / 100);
 
-      document.getElementById("resultDisplay").innerText =
-        `${currency}${finalPrice.toFixed(2)} (You saved: ${currency}${(price - discountedPrice).toFixed(2)}, GST: ${currency}${gstAmount.toFixed(2)})`;
+      discounted = Math.max(discounted, 0);
+
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('result').innerText = `Final Price: ${currency}${discounted.toFixed(2)}`;
+      document.getElementById('thankyou').style.display = 'block';
+
+      // Show Deal Feedback
+      const totalSaved = original - discounted;
+      const savePercent = (totalSaved / original) * 100;
+      const dealBox = document.getElementById('dealFeedback');
+      dealBox.style.display = 'block';
+      if (savePercent >= 50) dealBox.innerText = '🔥 Amazing deal! You’re saving big!';
+      else if (savePercent >= 30) dealBox.innerText = '👍 Good deal, worth considering!';
+      else if (savePercent >= 10) dealBox.innerText = '🙂 A decent discount.';
+      else dealBox.style.display = 'none';
     }
 
-    // Special theme logic
-    const themes = {
-      "01-01": { name: "Happy New Year!", class: "new-year-theme" },
-      "02-14": { name: "Happy Valentine's Day!", class: "valentine-theme" },
-      "12-25": { name: "Merry Christmas!", class: "christmas-theme" },
-      "08-15": { name: "Happy Independence Day!", class: "independence-theme" }
-    };
+    function shareApp() {
+      const url = window.location.href;
+      if (navigator.share) {
+        navigator.share({ title: 'Discount Calculator', url });
+      } else {
+        navigator.clipboard.writeText(url);
+        alert('🔗 Link copied to clipboard!');
+      }
+    }
 
-    const today = new Date();
-    const key = `${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    if (themes[key]) {
-      document.body.classList.add(themes[key].class);
-      const banner = document.getElementById("specialBanner");
-      banner.innerText = themes[key].name;
-      banner.style.display = "block";
+    function updateTime() {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' };
+      document.getElementById('datetime').innerText = now.toLocaleDateString(undefined, options);
     }
   </script></body>
 </html>
