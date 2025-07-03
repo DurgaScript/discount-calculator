@@ -5,63 +5,103 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Discount Calculator</title>
   <style>
+    :root {
+      --bg: #f6f6f6;
+      --text: #000;
+      --box: white;
+      --button: #007bff;
+    }
+
+    body.dark {
+      --bg: #1e1e1e;
+      --text: #fff;
+      --box: #2c2c2c;
+      --button: #0a84ff;
+    }
+
     body {
       font-family: 'Arial Rounded MT Bold', sans-serif;
       margin: 0;
       padding: 0;
-      background: #f6f6f6;
+      background: var(--bg);
+      color: var(--text);
+      transition: all 0.3s ease;
     }
+
     .container {
       max-width: 400px;
       margin: 40px auto;
-      background: white;
+      background: var(--box);
       padding: 25px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
+
     h2 {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
+
+    .toggle-row {
+      text-align: right;
+      margin-bottom: 10px;
+    }
+
     label {
       display: block;
       margin-top: 15px;
       font-size: 16px;
     }
+
     input, select {
       width: 100%;
       padding: 10px;
       font-size: 16px;
       margin-top: 5px;
+      background: white;
+      color: black;
     }
+
     .checkbox-row {
-      margin-top: 15px;
-    }
-    .checkbox-row label {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 16px;
+      margin-top: 15px;
     }
+
     button {
       width: 100%;
       padding: 12px;
       margin-top: 20px;
-      background-color: #007bff;
+      background-color: var(--button);
       color: white;
       border: none;
       font-size: 16px;
       border-radius: 6px;
+      cursor: pointer;
     }
-    .result {
+
+    .result, .savings {
       margin-top: 15px;
       font-weight: bold;
       text-align: center;
+    }
+
+    .copy-btn {
+      background: gray;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <div class="toggle-row">
+      <label>
+        🌗 <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()" />
+        Dark Mode
+      </label>
+    </div>
+
     <h2 id="title">Discount Calculator</h2>
 
     <label for="originalPrice" id="label-originalPrice">Original Price:</label>
@@ -74,10 +114,8 @@
     <input type="number" id="discountAmount" placeholder="e.g. 100" />
 
     <div class="checkbox-row">
-      <label id="applyGSTLabel">
-        <input type="checkbox" id="applyGST" />
-        Apply GST
-      </label>
+      <input type="checkbox" id="applyGST" />
+      <label for="applyGST" id="applyGSTLabel">Apply GST</label>
     </div>
 
     <label for="currency" id="label-currency">Currency:</label>
@@ -90,7 +128,8 @@
     <button onclick="calculate()" id="calculateBtn">Calculate</button>
 
     <div class="result" id="result"></div>
-    <div class="result" id="savings"></div>
+    <div class="savings" id="savings"></div>
+    <button class="copy-btn" onclick="copyResult()">📋 Copy Final Price</button>
 
     <label for="language" id="label-language">🌐 Language:</label>
     <select id="language" onchange="updateLanguage()">
@@ -129,6 +168,19 @@
 
       document.getElementById("result").innerText = `${translations[currentLang].finalPrice} ${currency} ${final}`;
       document.getElementById("savings").innerText = `${translations[currentLang].youSaved} ${currency} ${discountValue}`;
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark");
+    }
+
+    function copyResult() {
+      const resultText = document.getElementById("result").innerText;
+      if (resultText) {
+        navigator.clipboard.writeText(resultText).then(() => {
+          alert("Copied to clipboard!");
+        });
+      }
     }
 
     const translations = {
@@ -186,7 +238,7 @@
       document.getElementById("label-language").innerText = "🌐 " + t.language;
     }
 
-    updateLanguage(); // Set default language
+    updateLanguage();
   </script>
 </body>
 </html>
