@@ -2,158 +2,136 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Discount Calculator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
       padding: 20px;
-      background: #f4f4f4;
     }
+
     .container {
-      max-width: 500px;
+      max-width: 400px;
       margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
     }
-    input, select, button {
+
+    h1 {
+      text-align: center;
+      font-size: 1.6em;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    input[type="number"], select {
       width: 100%;
       padding: 10px;
-      margin: 10px 0;
-      font-size: 1rem;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1em;
     }
-    button {
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0056b3;
-    }
-    #result {
-      margin-top: 20px;
-      font-weight: bold;
-    }
-    .lang-switcher {
-      margin-top: 10px;
-    }
-    .checkbox-group {
+
+    .checkbox-row {
       display: flex;
       align-items: center;
-      margin-top: 10px;
+      gap: 10px;
+      margin-bottom: 15px;
     }
-    .checkbox-group label {
-      margin-left: 8px;
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+      text-align: center;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2 id="title">Discount Calculator</h2>
+    <h1>Discount Calculator</h1>
 
-    <label id="label-original">Original Price:</label>
-    <input type="number" id="originalPrice" placeholder="e.g. 1000" />
+    <label for="price">Original Price:</label>
+    <input type="number" id="price" placeholder="e.g. 1000" />
 
-    <label id="label-discount-percent">Discount (%):</label>
+    <label for="discountPercent">Discount (%):</label>
     <input type="number" id="discountPercent" placeholder="e.g. 20" />
 
-    <label id="label-discount-flat">Discount (₹):</label>
-    <input type="number" id="discountFlat" placeholder="e.g. 100" />
+    <label for="discountAmount">Discount (₹):</label>
+    <input type="number" id="discountAmount" placeholder="e.g. 100" />
 
-    <div class="checkbox-group">
+    <div class="checkbox-row">
       <input type="checkbox" id="gstCheck" />
-      <label for="gstCheck" id="label-apply">Apply GST</label>
+      <label for="gstCheck">Apply GST</label>
     </div>
 
-    <label for="currency" id="label-currency">Currency:</label>
+    <label for="currency">Currency:</label>
     <select id="currency">
       <option value="₹">₹ INR</option>
       <option value="$">$ USD</option>
       <option value="€">€ EUR</option>
     </select>
 
-    <button onclick="calculateFinalPrice()">Calculate</button>
+    <button onclick="calculate()">Calculate</button>
 
-    <p id="result"></p>
-
-    <div class="lang-switcher">
-      <label for="language">🌐 Language:</label>
-      <select id="language" onchange="updateLanguage()">
-        <option value="en">English</option>
-        <option value="te">తెలుగు</option>
-        <option value="hi">हिंदी</option>
-      </select>
-    </div>
+    <div class="result" id="result"></div>
   </div>
 
   <script>
-    const texts = {
-      en: {
-        title: "Discount Calculator",
-        original: "Original Price:",
-        percent: "Discount (%):",
-        flat: "Discount (₹):",
-        apply: "Apply GST",
-        currency: "Currency:",
-      },
-      te: {
-        title: "డిస్కౌంట్ కాలిక్యులేటర్",
-        original: "అసలు ధర:",
-        percent: "డిస్కౌంట్ (%):",
-        flat: "డిస్కౌంట్ (₹):",
-        apply: "GST వర్తించించు",
-        currency: "కరెన్సీ:",
-      },
-      hi: {
-        title: "छूट कैलकुलेटर",
-        original: "मूल्य:",
-        percent: "छूट (%):",
-        flat: "छूट (₹):",
-        apply: "GST लागू करें",
-        currency: "मुद्रा:",
-      },
-    };
+    function calculate() {
+      const price = parseFloat(document.getElementById('price').value) || 0;
+      const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
+      const discountAmount = parseFloat(document.getElementById('discountAmount').value) || 0;
+      const applyGst = document.getElementById('gstCheck').checked;
+      const currency = document.getElementById('currency').value;
 
-    function calculateFinalPrice() {
-      const originalPrice = parseFloat(document.getElementById("originalPrice").value) || 0;
-      const discountPercent = parseFloat(document.getElementById("discountPercent").value) || 0;
-      const discountFlat = parseFloat(document.getElementById("discountFlat").value) || 0;
-      const applyGST = document.getElementById("gstCheck").checked;
-      const currency = document.getElementById("currency").value;
+      let discountedPrice = price;
 
-      let price = originalPrice;
-
+      // Apply percentage discount
       if (discountPercent > 0) {
-        price -= (price * discountPercent / 100);
+        discountedPrice -= (price * discountPercent / 100);
       }
 
-      if (discountFlat > 0) {
-        price -= discountFlat;
+      // Apply fixed amount discount
+      if (discountAmount > 0) {
+        discountedPrice -= discountAmount;
       }
 
-      if (applyGST) {
-        price += price * 0.18; // 18% GST
+      // Apply GST (assume 18%)
+      if (applyGst) {
+        discountedPrice += discountedPrice * 0.18;
       }
 
-      document.getElementById("result").innerText = `Final Price: ${currency}${price.toFixed(2)}`;
+      discountedPrice = discountedPrice < 0 ? 0 : discountedPrice;
+
+      document.getElementById('result').textContent =
+        `Final Price: ${currency} ${discountedPrice.toFixed(2)}`;
     }
-
-    function updateLanguage() {
-      const lang = document.getElementById("language").value;
-      document.getElementById("title").innerText = texts[lang].title;
-      document.getElementById("label-original").innerText = texts[lang].original;
-      document.getElementById("label-discount-percent").innerText = texts[lang].percent;
-      document.getElementById("label-discount-flat").innerText = texts[lang].flat;
-      document.getElementById("label-apply").innerText = texts[lang].apply;
-      document.getElementById("label-currency").innerText = texts[lang].currency;
-    }
-
-    // Initialize default language
-    updateLanguage();
   </script>
 </body>
 </html>
