@@ -6,269 +6,212 @@
   <title>Discount Calculator</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to right, #e0f7fa, #fffde7);
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #dff6fd, #fffbe7);
       margin: 0;
       padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    .container {
-      background: white;
-      padding: 30px 20px;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      max-width: 400px;
-      width: 100%;
+      text-align: center;
     }
 
     h1 {
-      text-align: center;
-      font-size: 26px;
-      margin-bottom: 10px;
-      font-weight: bold;
+      font-size: 2rem;
+      margin-top: 20px;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
     }
 
     .timestamp {
-      text-align: center;
-      font-size: 14px;
-      margin-bottom: 25px;
       font-family: monospace;
-    }
-
-    label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 6px;
-      font-size: 14px;
-    }
-
-    .input-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 15px;
-    }
-
-    input[type="number"],
-    select {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    .unit {
-      font-weight: bold;
-      font-size: 16px;
-    }
-
-    .toggle-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      font-size: 1rem;
       margin-bottom: 20px;
     }
 
-    .toggle-row label {
-      margin: 0;
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
-    .toggle input {
-      width: 40px;
-      height: 20px;
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      text-align: left;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      background-color: #ccc;
+      border-radius: 24px;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transition: 0.4s;
+    }
+
+    .slider:before {
+      content: "";
+      position: absolute;
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.4s;
+    }
+
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
     }
 
     button {
+      width: 100%;
       padding: 10px;
-      font-size: 16px;
+      margin-top: 10px;
+      font-size: 1rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       color: white;
     }
 
-    .calculate {
-      background-color: #03a9f4;
-      width: 100%;
-      margin-bottom: 15px;
-    }
+    #calculateBtn { background-color: #03a9f4; }
+    #printBtn { background-color: #2196F3; }
+    #resetBtn { background-color: #555; }
+    #shareBtn { background-color: #00bcd4; }
 
-    .result {
-      background-color: #e0f2f1;
+    #result {
+      margin-top: 15px;
+      background-color: #e6fff7;
       padding: 10px;
-      margin-bottom: 15px;
       border-radius: 6px;
-      min-height: 20px;
+      font-weight: bold;
     }
 
-    .btn-group {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .print-btn {
-      background-color: #2196f3;
-    }
-
-    .reset-btn {
-      background-color: #616161;
-    }
-
-    .share-btn {
-      background-color: #00bcd4;
-    }
-
-    @media (max-width: 500px) {
-      .btn-group {
-        flex-direction: column;
-      }
-    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Discount Calculator</h1>
-    <div class="timestamp" id="timestamp"></div>
 
+  <h1>Discount Calculator</h1>
+  <div class="timestamp" id="timestamp"></div>
+
+  <div class="container">
     <label for="price">Original Price</label>
-    <div class="input-row">
-      <input type="number" id="price" placeholder="Enter price" />
-      <select id="currency">
+    <input type="number" id="price" placeholder="Enter price" />
+    <select id="currency">
       <option value="₹">₹ INR</option>
       <option value="$">$ USD</option>
       <option value="€">€ EUR</option>
       <option value="£">£ GBP</option>
       <option value="¥">¥ JPY</option>
-      <option value="₩">₩ KRW</option>
-      <option value="₽">₽ RUB</option>
-      <option value="฿">฿ THB</option>
     </select>
 
-    </div>
-
     <label for="discount">Discount (%)</label>
-    <div class="input-row">
-      <input type="number" id="discount" placeholder="e.g. 20" />
-      <span class="unit">%</span>
-    </div>
+    <input type="number" id="discount" placeholder="e.g. 20" />
 
-    /* Toggle Switch Styling */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
-  margin-left: 10px;
-  vertical-align: middle;
-}
+    <label for="gstToggle">Apply GST?
+      <label class="switch">
+        <input type="checkbox" id="gstToggle">
+        <span class="slider"></span>
+      </label>
+    </label>
 
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+    <button id="calculateBtn" onclick="calculate()">Calculate</button>
 
-.slider {
-  position: absolute;
-  cursor: pointer;
-  background-color: #ccc;
-  border-radius: 24px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transition: 0.4s;
-}
+    <div id="result"></div>
 
-.slider:before {
-  content: "";
-  position: absolute;
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  border-radius: 50%;
-  transition: 0.4s;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:checked + .slider:before {
-  transform: translateX(26px);
-}
-
-    </div>
-
-    <button class="calculate" onclick="calculate()">Calculate</button>
-    <div class="result" id="result"></div>
-
-    <div class="btn-group">
-      <button class="print-btn" onclick="window.print()">🖨️ Print</button>
-      <button class="reset-btn" onclick="resetForm()">🔁 Reset</button>
-      <button class="share-btn" onclick="share()">🔗 Share</button>
-    </div>
+    <button id="printBtn" onclick="window.print()">🖨️ Print</button>
+    <button id="resetBtn" onclick="resetForm()">🔄 Reset</button>
+    <button id="shareBtn" onclick="sharePage()">🔗 Share</button>
   </div>
 
   <script>
-    document.getElementById("timestamp").textContent =
-      new Date().toLocaleString("en-IN", {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
-        timeZoneName: 'short'
-      });
-
     function calculate() {
       const price = parseFloat(document.getElementById("price").value);
       const discount = parseFloat(document.getElementById("discount").value);
+      const currency = document.getElementById("currency").value;
       const applyGst = document.getElementById("gstToggle").checked;
 
       if (isNaN(price) || isNaN(discount)) {
-        document.getElementById("result").textContent = "Please enter valid values.";
+        alert("Please enter valid price and discount.");
         return;
       }
 
-      let discountedPrice = price - (price * (discount / 100));
+      let finalPrice = price - (price * discount / 100);
+
       if (applyGst) {
-        discountedPrice += discountedPrice * 0.18; // 18% GST
+        finalPrice += finalPrice * 0.18; // 18% GST
       }
 
-      document.getElementById("result").textContent =
-        "Final Price: " + discountedPrice.toFixed(2);
+      document.getElementById("result").textContent = 
+        `Final Price: ${currency} ${finalPrice.toFixed(2)}`;
     }
 
     function resetForm() {
       document.getElementById("price").value = "";
       document.getElementById("discount").value = "";
+      document.getElementById("currency").selectedIndex = 0;
       document.getElementById("gstToggle").checked = false;
       document.getElementById("result").textContent = "";
     }
 
-    function share() {
+    function sharePage() {
       if (navigator.share) {
         navigator.share({
-          title: "Discount Calculator",
-          text: "Check out this Discount Calculator!",
+          title: 'Discount Calculator',
+          text: 'Check out this discount calculator!',
           url: window.location.href,
         });
       } else {
-        alert("Sharing not supported on this browser.");
+        alert("Sharing not supported in your browser.");
       }
     }
+
+    // Show live timestamp
+    function updateTimestamp() {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const time = now.toLocaleTimeString('en-IN');
+      const date = now.toLocaleDateString('en-IN', options);
+      document.getElementById("timestamp").textContent = `${date} at ${time} IST`;
+    }
+
+    updateTimestamp();
+    setInterval(updateTimestamp, 1000);
   </script>
+
 </body>
 </html>
