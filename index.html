@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Discount Calculator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -26,7 +27,7 @@
     }
 
     .container {
-      max-width: 400px;
+      max-width: 420px;
       margin: auto;
       background-color: white;
       padding: 20px;
@@ -42,7 +43,6 @@
     }
 
     input, select {
-      width: 100%;
       padding: 10px;
       font-size: 1rem;
       border-radius: 6px;
@@ -98,20 +98,19 @@
     }
 
     button {
-      width: 100%;
       padding: 10px;
-      margin-top: 10px;
       font-size: 1rem;
       border: none;
       border-radius: 6px;
       cursor: pointer;
       color: white;
+      flex: 1;
     }
 
     #calculateBtn { background-color: #03a9f4; }
-    #printBtn { background-color: #2196F3; }
     #resetBtn { background-color: #555; }
-    #shareBtn { background-color: #00bcd4; }
+    #downloadBtn { background-color: #4CAF50; width: 100%; }
+    #shareBtn { background-color: #00bcd4; width: 100%; }
 
     #result {
       margin-top: 15px;
@@ -121,6 +120,25 @@
       font-weight: bold;
     }
 
+    .row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .row input {
+      flex: 1;
+    }
+
+    .row select {
+      width: 110px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -128,16 +146,19 @@
   <h1>Discount Calculator</h1>
   <div class="timestamp" id="timestamp"></div>
 
-  <div class="container">
+  <div class="container" id="pdf-content">
+
     <label for="price">Original Price</label>
-    <input type="number" id="price" placeholder="Enter price" />
-    <select id="currency">
-      <option value="₹">₹ INR</option>
-      <option value="$">$ USD</option>
-      <option value="€">€ EUR</option>
-      <option value="£">£ GBP</option>
-      <option value="¥">¥ JPY</option>
-    </select>
+    <div class="row">
+      <input type="number" id="price" placeholder="Enter price" />
+      <select id="currency">
+        <option value="₹">₹ INR</option>
+        <option value="$">$ USD</option>
+        <option value="€">€ EUR</option>
+        <option value="£">£ GBP</option>
+        <option value="¥">¥ JPY</option>
+      </select>
+    </div>
 
     <label for="discount">Discount (%)</label>
     <input type="number" id="discount" placeholder="e.g. 20" />
@@ -149,12 +170,14 @@
       </label>
     </label>
 
-    <button id="calculateBtn" onclick="calculate()">Calculate</button>
+    <div class="button-group">
+      <button id="calculateBtn" onclick="calculate()">Calculate</button>
+      <button id="resetBtn" onclick="resetForm()">Reset</button>
+    </div>
 
     <div id="result"></div>
 
-    <button id="printBtn" onclick="window.print()">🖨️ Print</button>
-    <button id="resetBtn" onclick="resetForm()">🔄 Reset</button>
+    <button id="downloadBtn" onclick="downloadPDF()">⬇️ Download PDF</button>
     <button id="shareBtn" onclick="sharePage()">🔗 Share</button>
   </div>
 
@@ -173,10 +196,10 @@
       let finalPrice = price - (price * discount / 100);
 
       if (applyGst) {
-        finalPrice += finalPrice * 0.18; // 18% GST
+        finalPrice += finalPrice * 0.18;
       }
 
-      document.getElementById("result").textContent = 
+      document.getElementById("result").textContent =
         `Final Price: ${currency} ${finalPrice.toFixed(2)}`;
     }
 
@@ -200,7 +223,6 @@
       }
     }
 
-    // Show live timestamp
     function updateTimestamp() {
       const now = new Date();
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -211,6 +233,14 @@
 
     updateTimestamp();
     setInterval(updateTimestamp, 1000);
+
+    async function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const content = document.getElementById("pdf-content").innerText;
+      doc.text(content, 10, 10);
+      doc.save("discount_calculator.pdf");
+    }
   </script>
 
 </body>
