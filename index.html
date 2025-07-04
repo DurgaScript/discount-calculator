@@ -80,21 +80,24 @@
   </header>
 
   <div class="container">
-    <div id="datetime">🗓️ Date & Time: <span id="liveTime">Loading...</span></div>
+    <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; font-size: 0.9rem; margin-bottom: 10px; color: #555;">
+      <span>📅 <strong>Date & Time:</strong></span> <span id="liveTime">Loading...</span>
+    </div>
+
     <p>👋 Welcome! Select your options and get your price instantly.</p>
 
-    <!-- Original Price with Currency -->
+    <!-- Currency + Original Price -->
     <div class="form-group">
       <label for="price">Original Price:</label>
       <div class="row">
-        <div style="flex: 0.8;">
+        <div style="flex: 0.7;">
           <select id="currency">
             <option value="₹">INR (₹)</option>
             <option value="$">USD ($)</option>
             <option value="€">EUR (€)</option>
           </select>
         </div>
-        <div style="flex: 1.2;">
+        <div style="flex: 1.3;">
           <input type="number" id="price" placeholder="Enter original price" />
         </div>
       </div>
@@ -120,6 +123,7 @@
       <label for="customGst">Enter Custom GST %:</label>
       <input type="number" id="customGst" placeholder="e.g. 12" />
     </div>
+
     <!-- Calculate Button -->
     <div class="form-group">
       <button onclick="calculate()">Calculate</button>
