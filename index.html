@@ -3,245 +3,213 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Discount Calculator</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <title>Universal Discount Calculator</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #dff6fd, #fffbe7);
       margin: 0;
       padding: 0;
+      background: #f3f4f6;
+      color: #333;
+    }
+    header {
+      background: #4f46e5;
+      color: white;
+      padding: 1rem;
       text-align: center;
     }
-
-    h1 {
-      font-size: 2rem;
-      margin-top: 20px;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-    }
-
-    .timestamp {
-      font-family: monospace;
-      font-size: 1rem;
-      margin-bottom: 20px;
-    }
-
     .container {
-      max-width: 420px;
-      margin: auto;
-      background-color: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
     }
-
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
     label {
       display: block;
-      margin-top: 15px;
-      margin-bottom: 5px;
-      text-align: left;
+      margin-bottom: 0.3rem;
     }
-
-    input, select {
-      padding: 10px;
+    input, select, button {
+      width: 100%;
+      padding: 0.6rem;
       font-size: 1rem;
-      border-radius: 6px;
       border: 1px solid #ccc;
-      margin-bottom: 10px;
+      border-radius: 8px;
     }
-
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 24px;
-      margin-left: 10px;
-      vertical-align: middle;
-    }
-
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      background-color: #ccc;
-      border-radius: 24px;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      transition: 0.4s;
-    }
-
-    .slider:before {
-      content: "";
-      position: absolute;
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      border-radius: 50%;
-      transition: 0.4s;
-    }
-
-    input:checked + .slider {
-      background-color: #2196F3;
-    }
-
-    input:checked + .slider:before {
-      transform: translateX(26px);
-    }
-
-    button {
-      padding: 10px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      color: white;
-      flex: 1;
-    }
-
-    #calculateBtn { background-color: #03a9f4; }
-    #resetBtn { background-color: #555; }
-    #downloadBtn { background-color: #4CAF50; width: 100%; }
-    #shareBtn { background-color: #00bcd4; width: 100%; }
-
-    #result {
-      margin-top: 15px;
-      background-color: #e6fff7;
-      padding: 10px;
-      border-radius: 6px;
-      font-weight: bold;
-    }
-
     .row {
       display: flex;
-      gap: 10px;
-      align-items: center;
+      gap: 1rem;
     }
-
-    .row input {
+    .row > div {
       flex: 1;
     }
-
-    .row select {
-      width: 110px;
-    }
-
-    .button-group {
+    .btn-group {
       display: flex;
-      gap: 10px;
-      margin-top: 10px;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    button {
+      cursor: pointer;
+      border: none;
+      background: #4f46e5;
+      color: white;
+      transition: 0.3s ease;
+    }
+    button:hover {
+      background: #3730a3;
+    }
+    .result-box {
+      background: #e0f7e9;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+    #datetime {
+      text-align: right;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      color: #555;
     }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Universal Discount Calculator</h1>
+  </header>
 
-  <h1>Discount Calculator</h1>
-  <div class="timestamp" id="timestamp"></div>
+  <div class="container">
+    <div id="datetime">Date & Time: 2025-07-04 19:31:05 IST</div>
+    <p>👋 Welcome! Select your options and get your price instantly.</p>
 
-  <div class="container" id="pdf-content">
+    <!-- Currency + Original Price -->
+    <div class="form-group">
+      <label for="price">Original Price:</label>
+      <div class="row">
+        <select id="currency">
+          <option value="₹">INR (₹)</option>
+          <option value="$">USD ($)</option>
+          <option value="€">EUR (€)</option>
+        </select>
+        <input type="number" id="price" placeholder="Enter original price" />
+      </div>
+    </div>
 
-    <label for="price">Original Price</label>
-    <div class="row">
-      <input type="number" id="price" placeholder="Enter price" />
-      <select id="currency">
-        <option value="₹">₹ INR</option>
-        <option value="$">$ USD</option>
-        <option value="€">€ EUR</option>
-        <option value="£">£ GBP</option>
-        <option value="¥">¥ JPY</option>
+    <!-- Discount -->
+    <div class="form-group">
+      <label for="discount">Discount:</label>
+      <input type="number" id="discount" placeholder="e.g. 20 for 20%" />
+    </div>
+    <!-- GST Section -->
+    <div class="form-group">
+      <label for="gstSelect">GST:</label>
+      <select id="gstSelect" onchange="handleGSTChange()" class="form-control">
+        <option value="none">No GST</option>
+        <option value="18">Apply 18% GST</option>
+        <option value="custom">Custom GST</option>
       </select>
     </div>
 
-    <label for="discount">Discount (%)</label>
-    <input type="number" id="discount" placeholder="e.g. 20" />
-
-    <label for="gstToggle">Apply GST?
-      <label class="switch">
-        <input type="checkbox" id="gstToggle">
-        <span class="slider"></span>
-      </label>
-    </label>
-
-    <div class="button-group">
-      <button id="calculateBtn" onclick="calculate()">Calculate</button>
-      <button id="resetBtn" onclick="resetForm()">Reset</button>
+    <div class="form-group" id="customGstDiv" style="display: none;">
+      <label for="customGst">Enter Custom GST %:</label>
+      <input type="number" id="customGst" placeholder="e.g. 12" />
     </div>
 
-    <div id="result"></div>
+    <!-- Calculate Button -->
+    <div class="form-group">
+      <button onclick="calculate()">Calculate</button>
+    </div>
 
-    <button id="downloadBtn" onclick="downloadPDF()">⬇️ Download PDF</button>
-    <button id="shareBtn" onclick="sharePage()">🔗 Share</button>
+    <!-- Result -->
+    <div id="result" class="result-box" style="display: none;"></div>
+
+    <!-- Button Group -->
+    <div class="btn-group">
+      <button onclick="resetForm()">Reset</button>
+      <button onclick="downloadPDF()">Download</button>
+      <button onclick="shareResult()">Share</button>
+    </div>
   </div>
-
   <script>
+    function handleGSTChange() {
+      const gstType = document.getElementById("gstSelect").value;
+      document.getElementById("customGstDiv").style.display = gstType === "custom" ? "block" : "none";
+    }
+
     function calculate() {
       const price = parseFloat(document.getElementById("price").value);
       const discount = parseFloat(document.getElementById("discount").value);
       const currency = document.getElementById("currency").value;
-      const applyGst = document.getElementById("gstToggle").checked;
+      let gst = 0;
+
+      const gstType = document.getElementById("gstSelect").value;
+      if (gstType === "18") gst = 18;
+      else if (gstType === "custom") {
+        const customGst = parseFloat(document.getElementById("customGst").value);
+        if (!isNaN(customGst)) gst = customGst;
+      }
 
       if (isNaN(price) || isNaN(discount)) {
         alert("Please enter valid price and discount.");
         return;
       }
 
-      let finalPrice = price - (price * discount / 100);
+      const discountAmount = (price * discount) / 100;
+      let discountedPrice = price - discountAmount;
 
-      if (applyGst) {
-        finalPrice += finalPrice * 0.18;
+      let gstAmount = 0;
+      if (gst > 0) {
+        gstAmount = (discountedPrice * gst) / 100;
+        discountedPrice += gstAmount;
       }
 
-      document.getElementById("result").textContent =
-        `Final Price: ${currency} ${finalPrice.toFixed(2)}`;
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = `
+        <strong>Original Price:</strong> ${currency}${price.toFixed(2)}<br>
+        <strong>Discount (${discount}%):</strong> -${currency}${discountAmount.toFixed(2)}<br>
+        <strong>${gst > 0 ? "GST Applied (" + gst + "%):" : "GST:"}</strong> ${currency}${gstAmount.toFixed(2)}<br><br>
+        <strong>Final Price:</strong> ${currency}${discountedPrice.toFixed(2)}<br><br>
+        ${discount > 30 ? '<span style="color:green;">🎉 Great deal!</span>' : ''}
+      `;
+      resultDiv.style.display = "block";
+
+      setTimeout(() => {
+        alert("✅ Thank you! Your result is ready.");
+      }, 500);
     }
 
     function resetForm() {
       document.getElementById("price").value = "";
       document.getElementById("discount").value = "";
-      document.getElementById("currency").selectedIndex = 0;
-      document.getElementById("gstToggle").checked = false;
-      document.getElementById("result").textContent = "";
+      document.getElementById("gstSelect").value = "none";
+      document.getElementById("customGst").value = "";
+      document.getElementById("customGstDiv").style.display = "none";
+      document.getElementById("result").style.display = "none";
     }
 
-    function sharePage() {
+    function shareResult() {
+      const result = document.getElementById("result").innerText;
       if (navigator.share) {
         navigator.share({
-          title: 'Discount Calculator',
-          text: 'Check out this discount calculator!',
-          url: window.location.href,
+          title: "Discount Calculator",
+          text: result,
         });
       } else {
-        alert("Sharing not supported in your browser.");
+        alert("Sharing not supported on this browser.");
       }
     }
 
-    function updateTimestamp() {
-      const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      const time = now.toLocaleTimeString('en-IN');
-      const date = now.toLocaleDateString('en-IN', options);
-      document.getElementById("timestamp").textContent = `${date} at ${time} IST`;
-    }
-
-    updateTimestamp();
-    setInterval(updateTimestamp, 1000);
-
-    async function downloadPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const content = document.getElementById("pdf-content").innerText;
-      doc.text(content, 10, 10);
-      doc.save("discount_calculator.pdf");
+    function downloadPDF() {
+      const resultText = document.getElementById("result").innerText;
+      const blob = new Blob([resultText], { type: "application/pdf" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "discount-result.pdf";
+      link.click();
     }
   </script>
-
 </body>
 </html>
