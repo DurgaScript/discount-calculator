@@ -1,168 +1,245 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#ffffff" />
-  <link rel="manifest" href="manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Universal Discount Calculator</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #eaf4ff, #f3f8ff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      min-height: 100vh;
       margin: 0;
-      padding: 0;
-      background: linear-gradient(to right, #f0f2f5, #e4eaf1);
-      color: #333;
-      transition: background 0.4s ease;
-    }
-    header, footer {
-      text-align: center;
       padding: 1rem;
     }
-    .container {
-      max-width: 500px;
-      margin: 2rem auto;
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       padding: 2rem;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-    h1 {
+      margin-top: 1rem;
+      width: 100%;
+      max-width: 400px;
       text-align: center;
     }
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: bold;
+
+    h2 {
+      margin-bottom: 0.5rem;
+      font-family: 'Trebuchet MS', sans-serif;
     }
-    input, select {
-      width: 100%;
+
+    .datetime {
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group {
+      display: flex;
+      margin-bottom: 1rem;
+    }
+
+    .form-group input {
+      flex: 1;
       padding: 0.6rem;
-      border-radius: 8px;
+      font-size: 1rem;
       border: 1px solid #ccc;
-      margin-top: 0.5rem;
+      border-radius: 6px 0 0 6px;
     }
-    .switch {
+
+    .form-group select {
+      width: 60px;
+      font-size: 1rem;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-left: 0;
+      border-radius: 0 6px 6px 0;
+      background: #f4f4f4;
+    }
+
+    .toggle {
       display: flex;
       align-items: center;
-      margin-top: 1rem;
-      justify-content: space-between;
+      justify-content: center;
+      margin-bottom: 1rem;
     }
-    .result {
-      margin-top: 2rem;
-      padding: 1rem;
-      background-color: #e8f5e9;
-      border-radius: 8px;
-      text-align: center;
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+      margin-left: 0.5rem;
     }
-    .language-switcher, .currency-symbol {
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
       position: absolute;
-      right: 1rem;
-      top: 1rem;
+      cursor: pointer;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
     }
-    .tools {
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    button {
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 0.5rem;
+    }
+
+    #result {
+      margin-top: 1rem;
+      font-weight: bold;
+      color: green;
+      background-color: #eafbe7;
+      padding: 0.5rem;
+      border-radius: 6px;
+    }
+
+    .language-select {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+
+    .footer-buttons {
       display: flex;
       justify-content: space-between;
-      margin-top: 1.5rem;
     }
-    button {
-      padding: 0.6rem 1rem;
-      border: none;
-      background-color: #1976d2;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .datetime {
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-      text-align: center;
-      color: #555;
+
+    @media (max-width: 480px) {
+      .form-group {
+        flex-direction: column;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        border-radius: 6px;
+        margin-bottom: 0.5rem;
+      }
+
+      .footer-buttons {
+        flex-direction: column;
+      }
+
+      .footer-buttons button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="language-switcher">
-      <select id="languageSelect">
-        <option value="en">English</option>
-        <option value="te">Telugu</option>
-        <option value="hi">Hindi</option>
-        <option value="es">Spanish</option>
-      </select>
-    </div>
-    <h1 id="welcomeText">Welcome!</h1>
-    <div class="datetime" id="datetime"></div>
-  </header>  <div class="container">
-    <label for="originalPrice">Original Price</label>
-    <div style="position: relative;">
+  <div class="language-select">
+    <select id="language">
+      <option value="en">English</option>
+      <option value="hi">Hindi</option>
+      <option value="ta">Tamil</option>
+      <option value="fr">French</option>
+    </select>
+  </div>
+
+  <h2>Welcome!</h2>
+  <div class="datetime" id="datetime"></div>
+
+  <div class="card">
+    <div class="form-group">
       <input type="number" id="originalPrice" placeholder="Enter price" />
-      <select id="currencySymbol" style="position: absolute; right: 0.2rem; top: 0.2rem; width: 4rem;">
+      <select id="currency">
         <option value="₹">₹</option>
         <option value="$">$</option>
         <option value="€">€</option>
-        <option value="¥">¥</option>
       </select>
-    </div><label for="discount">Discount</label>
-<div style="position: relative;">
-  <input type="number" id="discount" placeholder="e.g. 20" />
-  <select id="discountType" style="position: absolute; right: 0.2rem; top: 0.2rem; width: 4rem;">
-    <option value="%">%</option>
-    <option value="flat">Flat</option>
-  </select>
-</div>
+    </div>
 
-<div class="switch">
-  <label for="applyGST">Apply GST?</label>
-  <input type="checkbox" id="applyGST" />
-</div>
+    <div class="form-group">
+      <input type="number" id="discount" placeholder="e.g. 20" />
+      <select disabled><option>%</option></select>
+    </div>
 
-<div id="gstInputBox" style="display:none">
-  <label for="gstValue">GST %</label>
-  <input type="number" id="gstValue" placeholder="e.g. 18" />
-</div>
+    <div class="toggle">
+      <label>Apply GST?</label>
+      <label class="switch">
+        <input type="checkbox" id="applyGST">
+        <span class="slider"></span>
+      </label>
+    </div>
 
-<button onclick="calculateDiscount()">Calculate</button>
+    <button onclick="calculate()">Calculate</button>
+    <div id="result"></div>
 
-<div class="result" id="result"></div>
-<div class="tools">
-  <button onclick="window.print()">🖨 Print</button>
-  <button onclick="navigator.share ? navigator.share({ title: 'Discount Calculator', url: window.location.href }) : alert('Sharing not supported')">🔗 Share</button>
-</div>
+    <div class="footer-buttons">
+      <button onclick="window.print()">🖨️ Print</button>
+      <button onclick="navigator.share ? navigator.share({ title: 'Discount Calculator', url: window.location.href }) : alert('Share not supported');">🔗 Share</button>
+    </div>
+  </div>
 
-  </div>  <footer>
-    <p id="thankYouText"></p>
-  </footer>  <script>
-    document.getElementById("applyGST").addEventListener("change", function() {
-      document.getElementById("gstInputBox").style.display = this.checked ? "block" : "none";
-    });
-
-    function calculateDiscount() {
-      const price = parseFloat(document.getElementById("originalPrice").value);
-      const discount = parseFloat(document.getElementById("discount").value);
-      const discountType = document.getElementById("discountType").value;
-      const gstApplied = document.getElementById("applyGST").checked;
-      const gst = gstApplied ? parseFloat(document.getElementById("gstValue").value) : 0;
-      const currency = document.getElementById("currencySymbol").value;
-
-      let discountedPrice = discountType === "%" ? price - (price * (discount / 100)) : price - discount;
-      if (gstApplied && !isNaN(gst)) {
-        discountedPrice += (discountedPrice * gst / 100);
-      }
-
-      const result = `${currency} ${discountedPrice.toFixed(2)}`;
-      let evaluation = "";
-      if (discountType === "%" && discount >= 50) evaluation = "🎉 This is a great deal!";
-      document.getElementById("result").innerHTML = `<strong>Final Price:</strong> ${result}<br>${evaluation}`;
-      document.getElementById("thankYouText").innerText = "Thank you for using our tool!";
-    }
-
-    function updateTime() {
+  <script>
+    function updateDateTime() {
       const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short' };
-      document.getElementById("datetime").innerText = now.toLocaleString("en-IN", options);
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const dateStr = now.toLocaleDateString(undefined, options);
+      const timeStr = now.toLocaleTimeString(undefined, { timeZoneName: 'short' });
+      document.getElementById('datetime').textContent = `${dateStr} at ${timeStr}`;
     }
 
-    setInterval(updateTime, 60000);
-    updateTime();
-  </script></body>
+    function calculate() {
+      const original = parseFloat(document.getElementById('originalPrice').value) || 0;
+      const discount = parseFloat(document.getElementById('discount').value) || 0;
+      const applyGST = document.getElementById('applyGST').checked;
+      const currency = document.getElementById('currency').value;
+
+      let finalPrice = original - (original * discount / 100);
+      if (applyGST) finalPrice += finalPrice * 0.18;
+
+      finalPrice = Math.max(0, finalPrice).toFixed(2);
+
+      const resultBox = document.getElementById('result');
+      resultBox.innerHTML = `Final Price: ${currency} ${finalPrice}<br>Thank you!`;
+
+      if (discount >= 30) {
+        resultBox.innerHTML += `<br><span style="color:blue;">🎉 Great deal!</span>`;
+      }
+    }
+
+    window.onload = updateDateTime;
+  </script>
+</body>
 </html>
