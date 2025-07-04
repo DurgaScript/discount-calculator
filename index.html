@@ -1,238 +1,168 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="manifest" href="manifest.json">
   <title>Universal Discount Calculator</title>
   <style>
-    :root {
-      --primary: #4a90e2;
-      --accent: #f5f5f5;
-      --text: #333;
-      --bg: #ffffff;
-    }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
-      background-color: var(--accent);
-      color: var(--text);
+      padding: 0;
+      background: linear-gradient(to right, #f0f2f5, #e4eaf1);
+      color: #333;
+      transition: background 0.4s ease;
+    }
+    header, footer {
+      text-align: center;
+      padding: 1rem;
     }
     .container {
-      max-width: 600px;
-      background: var(--bg);
-      margin: 40px auto;
-      padding: 20px;
+      max-width: 500px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: #fff;
       border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
     h1 {
       text-align: center;
-      margin-bottom: 1rem;
-    }
-    #datetime {
-      text-align: right;
-      font-size: 0.9rem;
-      color: #666;
     }
     label {
-      font-weight: 600;
       display: block;
       margin-top: 1rem;
-    }
-    .input-group {
-      display: flex;
-      align-items: center;
-      margin-top: 0.5rem;
-    }
-    .input-group input,
-    .input-group select {
-      padding: 10px;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      flex: 1;
-    }
-    .input-group select.currency {
-      max-width: 80px;
-      margin-left: 8px;
-    }
-    .toggle-container {
-      display: flex;
-      align-items: center;
-      margin-top: 1.5rem;
-    }
-    .toggle-label {
-      margin-right: 10px;
-    }
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 24px;
-    }
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: .4s;
-      border-radius: 34px;
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 4px;
-      bottom: 3px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    }
-    input:checked + .slider {
-      background-color: var(--primary);
-    }
-    input:checked + .slider:before {
-      transform: translateX(26px);
-    }
-    .buttons {
-      margin-top: 20px;
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-    .buttons button {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      background-color: var(--primary);
-      color: white;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .buttons button:hover {
-      background-color: #357ABD;
-    }
-    .result {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 1.2rem;
       font-weight: bold;
     }
-    @media (max-width: 600px) {
-      .container {
-        margin: 20px;
-        padding: 15px;
-      }
-      .buttons button {
-        font-size: 0.9rem;
-      }
+    input, select {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-top: 0.5rem;
+    }
+    .switch {
+      display: flex;
+      align-items: center;
+      margin-top: 1rem;
+      justify-content: space-between;
+    }
+    .result {
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: #e8f5e9;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .language-switcher, .currency-symbol {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+    }
+    .tools {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+    }
+    button {
+      padding: 0.6rem 1rem;
+      border: none;
+      background-color: #1976d2;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .datetime {
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #555;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div id="datetime"></div>
-    <h1>Universal Discount Tool</h1>
-
-    <label for="original">Original Price</label>
-    <div class="input-group">
-      <input type="number" id="original" placeholder="Enter price" />
-      <select id="currency" class="currency">
+  <header>
+    <div class="language-switcher">
+      <select id="languageSelect">
+        <option value="en">English</option>
+        <option value="te">Telugu</option>
+        <option value="hi">Hindi</option>
+        <option value="es">Spanish</option>
+      </select>
+    </div>
+    <h1 id="welcomeText">Welcome!</h1>
+    <div class="datetime" id="datetime"></div>
+  </header>  <div class="container">
+    <label for="originalPrice">Original Price</label>
+    <div style="position: relative;">
+      <input type="number" id="originalPrice" placeholder="Enter price" />
+      <select id="currencySymbol" style="position: absolute; right: 0.2rem; top: 0.2rem; width: 4rem;">
         <option value="₹">₹</option>
         <option value="$">$</option>
         <option value="€">€</option>
         <option value="¥">¥</option>
       </select>
-    </div>
+    </div><label for="discount">Discount</label>
+<div style="position: relative;">
+  <input type="number" id="discount" placeholder="e.g. 20" />
+  <select id="discountType" style="position: absolute; right: 0.2rem; top: 0.2rem; width: 4rem;">
+    <option value="%">%</option>
+    <option value="flat">Flat</option>
+  </select>
+</div>
 
-    <label for="discount">Discount</label>
-    <div class="input-group">
-      <input type="number" id="discount" placeholder="Enter discount" />
-      <select id="discountType">
-        <option value="percent">%</option>
-        <option value="flat">Flat</option>
-      </select>
-    </div>
+<div class="switch">
+  <label for="applyGST">Apply GST?</label>
+  <input type="checkbox" id="applyGST" />
+</div>
 
-    <div class="toggle-container">
-      <span class="toggle-label">Apply GST</span>
-      <label class="switch">
-        <input type="checkbox" id="toggleGST" onclick="toggleGstInput()">
-        <span class="slider"></span>
-      </label>
-    </div>
+<div id="gstInputBox" style="display:none">
+  <label for="gstValue">GST %</label>
+  <input type="number" id="gstValue" placeholder="e.g. 18" />
+</div>
 
-    <div id="gstInputSection" style="display:none">
-      <label for="gst">GST %</label>
-      <input type="number" id="gst" placeholder="Enter GST %">
-    </div>
+<button onclick="calculateDiscount()">Calculate</button>
 
-    <div class="buttons">
-      <button onclick="calculateDiscount()">Calculate</button>
-      <button onclick="window.print()">Print</button>
-      <button onclick="shareSite()">Share</button>
-    </div>
+<div class="result" id="result"></div>
+<div class="tools">
+  <button onclick="window.print()">🖨 Print</button>
+  <button onclick="navigator.share ? navigator.share({ title: 'Discount Calculator', url: window.location.href }) : alert('Sharing not supported')">🔗 Share</button>
+</div>
 
-    <div class="result" id="result"></div>
-  </div>
-
-  <script>
-    function updateDateTime() {
-      const now = new Date();
-      const options = {
-        weekday: 'short',
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        timeZoneName: 'short'
-      };
-      document.getElementById("datetime").innerText = now.toLocaleString(undefined, options);
-    }
-    updateDateTime();
-    setInterval(updateDateTime, 1000);
-
-    function toggleGstInput() {
-      const gstInput = document.getElementById("gstInputSection");
-      gstInput.style.display = document.getElementById("toggleGST").checked ? "block" : "none";
-    }
+  </div>  <footer>
+    <p id="thankYouText"></p>
+  </footer>  <script>
+    document.getElementById("applyGST").addEventListener("change", function() {
+      document.getElementById("gstInputBox").style.display = this.checked ? "block" : "none";
+    });
 
     function calculateDiscount() {
-      const price = parseFloat(document.getElementById("original").value);
+      const price = parseFloat(document.getElementById("originalPrice").value);
       const discount = parseFloat(document.getElementById("discount").value);
-      const type = document.getElementById("discountType").value;
-      const currency = document.getElementById("currency").value;
-      const gst = parseFloat(document.getElementById("gst").value) || 0;
-      const applyGst = document.getElementById("toggleGST").checked;
+      const discountType = document.getElementById("discountType").value;
+      const gstApplied = document.getElementById("applyGST").checked;
+      const gst = gstApplied ? parseFloat(document.getElementById("gstValue").value) : 0;
+      const currency = document.getElementById("currencySymbol").value;
 
-      if (isNaN(price) || isNaN(discount)) {
-        alert("Enter valid price and discount");
-        return;
+      let discountedPrice = discountType === "%" ? price - (price * (discount / 100)) : price - discount;
+      if (gstApplied && !isNaN(gst)) {
+        discountedPrice += (discountedPrice * gst / 100);
       }
 
-      let discounted = type === "percent" ? price * (1 - discount / 100) : price - discount;
-      if (applyGst) discounted *= (1 + gst / 100);
-
-      document.getElementById("result").innerText = `Final Price: ${currency} ${discounted.toFixed(2)}`;
+      const result = `${currency} ${discountedPrice.toFixed(2)}`;
+      let evaluation = "";
+      if (discountType === "%" && discount >= 50) evaluation = "🎉 This is a great deal!";
+      document.getElementById("result").innerHTML = `<strong>Final Price:</strong> ${result}<br>${evaluation}`;
+      document.getElementById("thankYouText").innerText = "Thank you for using our tool!";
     }
 
-    function shareSite() {
-      navigator.clipboard.writeText(window.location.href);
-      alert("Page link copied to clipboard!");
+    function updateTime() {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short' };
+      document.getElementById("datetime").innerText = now.toLocaleString("en-IN", options);
     }
-  </script>
-</body>
+
+    setInterval(updateTime, 60000);
+    updateTime();
+  </script></body>
 </html>
