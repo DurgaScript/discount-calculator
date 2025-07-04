@@ -44,6 +44,12 @@
       display: flex;
       gap: 1rem;
     }
+    .currency-col {
+      flex: 0.6;
+    }
+    .price-col {
+      flex: 1.4;
+    }
     .btn-group {
       display: flex;
       justify-content: space-between;
@@ -67,10 +73,9 @@
     }
     #datetime {
       text-align: right;
-      font-size: 0.95rem;
-      margin-bottom: 10px;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
       color: #555;
-      font-weight: 500;
     }
   </style>
 </head>
@@ -80,12 +85,11 @@
   </header>
 
   <div class="container">
-    <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; font-size: 0.9rem; margin-bottom: 10px; color: #555;">
-      <span>📅 <strong>Date & Time:</strong></span> <span id="liveTime">Loading...</span>
+    <div id="datetime">
+      <span style="font-size: 1rem;">📅 <strong>Date & Time:</strong> <span id="liveTime">Loading...</span>
+      </span>
     </div>
-
     <p>👋 Welcome! Select your options and get your price instantly.</p>
-
     <!-- Currency + Original Price -->
     <div class="form-group">
       <label for="price">Original Price:</label>
