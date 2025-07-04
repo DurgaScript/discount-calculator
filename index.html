@@ -84,44 +84,46 @@
     <h1>Universal Discount Calculator</h1>
   </header>
 
-  <div class="container">
-    <div id="datetime">
-      <span style="font-size: 1rem;">📅 <strong>Date & Time:</strong> <span id="liveTime">Loading...</span>
-      </span>
+  <div class="card">
+  <div class="header">
+    <div id="datetime" class="datetime">
+      <span>📅 <strong>Date & Time:</strong> <span id="liveTime">Loading...</span></span>
     </div>
-    <p>👋 Welcome! Select your options and get your price instantly.</p>
-    <!-- Currency + Original Price -->
-    <div class="form-group">
-      <label for="price">Original Price:</label>
-      <div class="row">
-        <div style="flex: 0.7;">
-          <select id="currency">
-            <option value="₹">INR (₹)</option>
-            <option value="$">USD ($)</option>
-            <option value="€">EUR (€)</option>
-          </select>
-        </div>
-        <div style="flex: 1.3;">
-          <input type="number" id="price" placeholder="Enter original price" />
-        </div>
+  </div>
+
+  <p>👋 Welcome! Select your options and get your price instantly.</p>
+
+  <div class="section">
+    <label for="price">Original Price:</label>
+    <div class="row" style="display: flex; gap: 8px;">
+      <div style="flex: 0 0 30%;">
+        <select id="currency">
+          <option value="INR">INR (₹)</option>
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+        </select>
+      </div>
+      <div style="flex: 1;">
+        <input type="number" id="price" placeholder="Enter original price" />
       </div>
     </div>
+  </div>
 
-    <!-- Discount -->
-    <div class="form-group">
-      <label for="discount">Discount:</label>
-      <input type="number" id="discount" placeholder="e.g. 20 for 20%" />
-    </div>
+  <div class="section">
+    <label for="discount">Discount:</label>
+    <input type="number" id="discount" placeholder="e.g. 20 for 20%" />
+  </div>
 
-    <!-- GST Section -->
-    <div class="form-group">
-      <label for="gstSelect">GST:</label>
-      <select id="gstSelect" onchange="handleGSTChange()">
-        <option value="none">No GST</option>
-        <option value="18">Apply 18% GST</option>
-        <option value="custom">Custom GST</option>
-      </select>
-    </div>
+  <div class="section">
+    <label for="gst">GST:</label>
+    <select id="gst">
+      <option value="0">No GST</option>
+      <option value="5">5%</option>
+      <option value="12">12%</option>
+      <option value="18">18%</option>
+      <option value="28">28%</option>
+    </select>
+  </div>
 
     <div class="form-group" id="customGstDiv" style="display: none;">
       <label for="customGst">Enter Custom GST %:</label>
