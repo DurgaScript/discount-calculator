@@ -81,8 +81,9 @@
     <h1>Universal Discount Calculator</h1>
   </header>
 
-  <div class="container">
-    <div id="datetime">Date & Time: 2025-07-04 19:31:05 IST</div>
+  <div id="datetime" style="text-align: right; font-size: 0.9rem; margin-bottom: 10px;">
+  Date & Time: <span id="liveTime">Loading...</span>
+  </div>
     <p>👋 Welcome! Select your options and get your price instantly.</p>
 
     <!-- Currency + Original Price -->
@@ -219,3 +220,23 @@
   <a href="about.html" style="color:#007bff; text-decoration: none;">About</a> |
   <a href="privacy.html" style="color:#007bff; text-decoration: none;">Privacy Policy</a>
 </footer>
+
+<script>
+  function updateDateTime() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    const timezone = 'IST'; // fixed as IST (India Standard Time)
+
+    const formatted = `${year}-${month}-${day} ${hours}:${minutes}:${seconds} ${timezone}`;
+    document.getElementById('liveTime').textContent = formatted;
+  }
+
+  updateDateTime(); // run once immediately
+  setInterval(updateDateTime, 1000); // update every second
+</script>
