@@ -7,142 +7,147 @@
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to right, #e0f7fa, #f1f8e9);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #fffde7);
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      padding-top: 20px;
+      height: 100vh;
+      flex-direction: column;
     }
 
     h1 {
-      font-size: 2rem;
+      margin-bottom: 0;
+      font-size: 2em;
       font-weight: bold;
-      margin-bottom: 10px;
     }
 
     h2 {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 1.2rem;
-      margin-bottom: 10px;
+      margin: 5px 0;
+      font-family: monospace;
     }
 
-    .card {
+    .container {
       background: white;
       padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      max-width: 360px;
-      width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
     }
 
-    .form-group {
-      margin-bottom: 15px;
-      position: relative;
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: 600;
     }
 
-    input, select {
-      width: 100%;
+    .input-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    input[type="number"] {
+      flex: 1;
       padding: 10px;
-      border: 1px solid #ccc;
+      font-size: 16px;
       border-radius: 8px;
-      font-size: 1rem;
+      border: 1px solid #ccc;
     }
 
-    .inline-suffix {
-      position: absolute;
-      top: 50%;
-      right: 10px;
-      transform: translateY(-50%);
-      pointer-events: none;
-      color: #555;
+    select, .toggle {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
     }
 
-    .toggle {
+    .toggle-container {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 10px;
+      margin-top: 15px;
     }
 
     .toggle input[type="checkbox"] {
-      display: none;
+      width: 0;
+      height: 0;
+      visibility: hidden;
     }
 
-    .toggle-switch {
-      position: relative;
+    .toggle-label {
+      display: inline-block;
       width: 50px;
-      height: 24px;
+      height: 25px;
       background: #ccc;
-      border-radius: 24px;
-      transition: background 0.3s;
+      border-radius: 25px;
+      position: relative;
       cursor: pointer;
     }
 
-    .toggle-switch::after {
+    .toggle-label::after {
       content: '';
       position: absolute;
       width: 20px;
       height: 20px;
-      top: 2px;
-      left: 2px;
       background: white;
       border-radius: 50%;
-      transition: transform 0.3s;
+      top: 2.5px;
+      left: 2.5px;
+      transition: 0.3s;
     }
 
-    input[type="checkbox"]:checked + .toggle-switch {
-      background: #2196F3;
+    .toggle input:checked + .toggle-label {
+      background: #4caf50;
     }
 
-    input[type="checkbox"]:checked + .toggle-switch::after {
-      transform: translateX(26px);
+    .toggle input:checked + .toggle-label::after {
+      transform: translateX(25px);
     }
 
-    #result {
-      background: #e0f7fa;
-      padding: 10px;
-      border-radius: 10px;
+    .gst-input {
+      display: none;
       margin-top: 10px;
-      min-height: 20px;
-      text-align: center;
     }
 
-    .button-row {
+    .btn-group {
       display: flex;
-      justify-content: center;
-      gap: 10px;
+      justify-content: space-between;
       margin-top: 15px;
     }
 
-    .btn {
+    button {
       padding: 10px 15px;
       border: none;
       border-radius: 8px;
-      font-size: 0.95rem;
       cursor: pointer;
+      font-weight: bold;
       color: white;
+      transition: 0.3s;
     }
 
-    .btn-primary {
-      background-color: #2196F3;
-    }
+    .calculate-btn { background: #03a9f4; }
+    .reset-btn { background: #757575; }
+    .print-btn { background: #2196f3; }
+    .share-btn { background: #00bcd4; }
 
-    .btn-secondary {
-      background-color: #757575;
-    }
-
-    .date-time {
-      font-size: 0.9rem;
-      margin-bottom: 20px;
-      color: #444;
+    .result {
+      margin-top: 15px;
+      padding: 10px;
+      background: #e0f2f1;
+      border-radius: 10px;
+      text-align: center;
     }
 
     @media (max-width: 500px) {
-      .card {
-        margin: 0 15px;
+      .btn-group {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      button {
+        width: 100%;
       }
     }
   </style>
@@ -150,106 +155,105 @@
 <body>
 
   <h1>Discount Calculator</h1>
-  <h2>Welcome!</h2>
-  <div class="date-time" id="datetime"></div>
+  <h2 id="datetime">Loading...</h2>
 
-  <form class="card" id="discount-form" onsubmit="calculateDiscount(); return false;">
-    <div class="form-group">
-      <input type="number" id="price" placeholder="Enter price" required />
-      <select id="currency" class="inline-suffix">
-        <option value="₹">₹</option>
-        <option value="$">$</option>
-        <option value="€">€</option>
+  <div class="container">
+    <label for="price">Original Price</label>
+    <div class="input-group">
+      <input type="number" id="price" placeholder="Enter price" />
+      <select id="currency">
+        <option>₹</option>
+        <option>$</option>
+        <option>€</option>
+        <option>£</option>
       </select>
     </div>
 
-    <div class="form-group">
-      <input type="number" id="discount" placeholder="e.g. 20" required />
-      <span class="inline-suffix">%</span>
+    <label for="discount">Discount (%)</label>
+    <div class="input-group">
+      <input type="number" id="discount" placeholder="e.g. 20" />
+      <span>%</span>
     </div>
 
-    <div class="toggle">
-      <label for="gst">Apply GST?</label>
-      <input type="checkbox" id="gst-toggle" onchange="toggleGSTBox()" />
-      <span class="toggle-switch"></span>
+    <div class="toggle-container">
+      <span>Apply GST?</span>
+      <div class="toggle">
+        <input type="checkbox" id="gstToggle">
+        <label for="gstToggle" class="toggle-label"></label>
+      </div>
     </div>
 
-    <div class="form-group" id="gst-box" style="display:none;">
-      <input type="number" id="gst" placeholder="GST %" />
-      <span class="inline-suffix">%</span>
+    <div class="gst-input" id="gstInputGroup">
+      <label for="gst">GST (%)</label>
+      <input type="number" id="gst" placeholder="e.g. 18">
     </div>
 
-    <button type="submit" class="btn btn-primary" style="width: 100%;">Calculate</button>
+    <button class="calculate-btn" onclick="calculate()">Calculate</button>
 
-    <div id="result"></div>
+    <div class="result" id="resultBox"></div>
 
-    <div class="button-row">
-      <button type="button" onclick="window.print()" class="btn btn-primary">🖨️ Print</button>
-      <button type="reset" onclick="resetForm()" class="btn btn-secondary">🔄 Reset</button>
-      <button type="button" onclick="shareResult()" class="btn btn-primary">🔗 Share</button>
+    <div class="btn-group">
+      <button class="print-btn" onclick="window.print()">🖨️ Print</button>
+      <button class="reset-btn" onclick="resetForm()">🔄 Reset</button>
+      <button class="share-btn" onclick="navigator.share ? navigator.share({title:'Discount Calculator', url:location.href}) : alert('Sharing not supported')">🔗 Share</button>
     </div>
-  </form>
+  </div>
 
   <script>
     function updateDateTime() {
       const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      const timeString = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-      const dateString = now.toLocaleDateString('en-IN', options);
-      document.getElementById("datetime").textContent = `${dateString} at ${timeString} IST`;
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZoneName: "short"
+      };
+      document.getElementById("datetime").textContent = now.toLocaleString("en-IN", options);
     }
 
-    function toggleGSTBox() {
-      const gstBox = document.getElementById('gst-box');
-      gstBox.style.display = document.getElementById('gst-toggle').checked ? 'block' : 'none';
-    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
 
-    function calculateDiscount() {
-      const price = parseFloat(document.getElementById('price').value);
-      const discount = parseFloat(document.getElementById('discount').value);
-      const gstChecked = document.getElementById('gst-toggle').checked;
-      const gst = gstChecked ? parseFloat(document.getElementById('gst').value || 0) : 0;
-      const currency = document.getElementById('currency').value;
+    document.getElementById("gstToggle").addEventListener("change", function () {
+      document.getElementById("gstInputGroup").style.display = this.checked ? "block" : "none";
+    });
+
+    function calculate() {
+      const price = parseFloat(document.getElementById("price").value);
+      const discount = parseFloat(document.getElementById("discount").value);
+      const currency = document.getElementById("currency").value;
+      const applyGst = document.getElementById("gstToggle").checked;
+      const gst = applyGst ? parseFloat(document.getElementById("gst").value) : 0;
 
       if (isNaN(price) || isNaN(discount)) {
-        alert("Please enter valid numbers.");
+        alert("Please enter valid price and discount.");
         return;
       }
 
-      const discountedPrice = price - (price * discount / 100);
-      const gstAmount = discountedPrice * gst / 100;
-      const finalPrice = discountedPrice + gstAmount;
-
-      let message = `Final Price: ${currency}${finalPrice.toFixed(2)}<br>Thank you!`;
-
-      if (discount >= 50) {
-        message += `<br><strong>Great Deal!</strong>`;
+      let discountedPrice = price - (price * discount / 100);
+      if (applyGst && !isNaN(gst)) {
+        discountedPrice += discountedPrice * gst / 100;
       }
 
-      document.getElementById('result').innerHTML = message;
+      const worthIt = discount >= 30 ? "🎉 Great Deal!" : (discount < 10 ? "🧐 Not a big discount." : "");
+
+      document.getElementById("resultBox").innerHTML = `
+        Final Price: <strong>${currency} ${discountedPrice.toFixed(2)}</strong><br>${worthIt}
+      `;
     }
 
     function resetForm() {
-      document.getElementById('discount-form').reset();
-      document.getElementById('gst-box').style.display = 'none';
-      document.getElementById('result').innerHTML = '';
+      document.getElementById("price").value = "";
+      document.getElementById("discount").value = "";
+      document.getElementById("gst").value = "";
+      document.getElementById("gstToggle").checked = false;
+      document.getElementById("gstInputGroup").style.display = "none";
+      document.getElementById("resultBox").innerHTML = "";
     }
-
-    function shareResult() {
-      const resultText = document.getElementById('result').innerText;
-      if (navigator.share) {
-        navigator.share({
-          title: 'Discount Calculator',
-          text: resultText,
-          url: window.location.href
-        });
-      } else {
-        alert("Sharing not supported on this device.");
-      }
-    }
-
-    updateDateTime();
-    setInterval(updateDateTime, 60000);
   </script>
 </body>
 </html>
