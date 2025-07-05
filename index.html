@@ -5,147 +5,165 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Universal Discount Calculator</title>
   <style>
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: #f3f4f6;
-    color: #333;
-  }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f3f4f6;
+      color: #333;
+    }
 
-  header {
-    background: #4f46e5;
-    color: white;
-    padding: 1rem;
-    text-align: center;
-  }
+    header {
+      background: #4f46e5;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
 
-  .container {
-    max-width: 600px;
-    margin: 2rem auto;
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
-  }
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
 
-  #datetime {
-    text-align: right;
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-    color: #555;
-  }
+    #datetime {
+      text-align: right;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      color: #555;
+    }
 
-  .form-group {
-    margin-bottom: 1.5rem;
-  }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
 
-  label {
-    display: block;
-    margin-bottom: 0.3rem;
-  }
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+    }
 
-  input, select, button {
-    padding: 0.6rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    width: 100%;
-    box-sizing: border-box;
-  }
+    input, select, button {
+      padding: 0.6rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
 
-  .row {
-    display: flex;
-    gap: 1rem;
-  }
+    .row {
+      display: flex;
+      gap: 1rem;
+    }
 
-  .row .half {
-    width: 50%;
-  }
+    .row .half {
+      width: 50%;
+    }
 
-  .btn-group {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 1rem;
-  }
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
 
-  button {
-    flex: 1;
-    cursor: pointer;
-    border: none;
-    background: #4f46e5;
-    color: white;
-    transition: 0.3s ease;
-    border-radius: 8px;
-  }
+    button {
+      flex: 1;
+      cursor: pointer;
+      border: none;
+      background: #4f46e5;
+      color: white;
+      transition: 0.3s ease;
+      border-radius: 8px;
+    }
 
-  button:hover {
-    background: #3730a3;
-  }
+    button:hover {
+      background: #3730a3;
+    }
 
-  .result-box {
-    background: #e7fbe9;
-    border-left: 6px solid #10b981;
-    padding: 1.5rem;
-    border-radius: 12px;
-    margin-top: 1.5rem;
-    animation: fadeIn 0.8s ease-in-out;
-  }
+    .result-box {
+      background: #e7fbe9;
+      border-left: 6px solid #10b981;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-top: 1.5rem;
+      animation: fadeIn 0.8s ease-in-out;
+    }
 
-  .result-box strong {
-    display: inline-block;
-    margin-top: 5px;
-  }
+    .result-box strong {
+      display: inline-block;
+      margin-top: 5px;
+    }
 
-  .welcome-message, .thankyou-message {
-    padding: 1rem;
-    border-radius: 8px;
-    margin: 1.5rem 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    animation: fadeIn 1s ease-in-out;
-  }
+    .animated-message {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      margin-top: 1rem;
+      animation: fadeIn 1s ease;
+    }
 
-  .welcome-message {
-    background-color: #f0f4ff;
-    border-left: 5px solid #4f46e5;
-    color: #333;
-  }
+    .welcome-message {
+      background-color: #eef2ff;
+      border-left: 4px solid #6366f1;
+      color: #3730a3;
+    }
 
-  .thankyou-message {
-    background-color: #e7fbe9;
-    border-left: 5px solid #10b981;
-    font-weight: bold;
-    color: #065f46;
-  }
+    .success-message {
+      background-color: #e7fbe9;
+      border-left: 4px solid #10b981;
+      color: #065f46;
+    }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+    .animated-message .icon {
+      font-size: 1.6rem;
+    }
 
-  footer {
-    text-align: center;
-    font-size: 14px;
-    margin-top: 50px;
-    padding: 15px;
-    color: #666;
-    background-color: #f9f9f9;
-    border-top: 1px solid #ddd;
-  }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-  footer a {
-    margin: 0 10px;
-    color: #4f46e5;
-    text-decoration: none;
-  }
+    footer {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 50px;
+      padding: 15px;
+      color: #666;
+      background-color: #f9f9f9;
+      border-top: 1px solid #ddd;
+    }
 
-  footer a:hover {
-    text-decoration: underline;
-  }
-</style>
+    footer a {
+      margin: 0 10px;
+      color: #4f46e5;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Universal Discount Calculator</h1>
+  </header>
+
+  <div class="container">
+    <div id="datetime">Date & Time: <span id="liveTime">Loading...</span></div>
+
+    <!-- Animated Welcome Message -->
+    <div class="animated-message welcome-message" id="welcomeMsg">
+      <span class="icon">✨</span>
+      <div class="text">Welcome! Quickly calculate your discounted price, including GST and custom settings.</div>
+    </div>
 <body>
   <header>
     <h1>Universal Discount Calculator</h1>
@@ -155,11 +173,11 @@
     <div id="datetime">Date & Time: <span id="liveTime">Loading...</span></div>
 
     <!-- Welcome Message -->
-    <div class="welcome-message" id="welcomeMsg">
-      <span style="font-size: 1.8rem;">👋</span>
-      <p style="margin: 0; font-size: 1rem;">
+    <div class="animated-message" id="welcomeMsg">
+      <span class="icon">✨</span>
+      <div class="text">
         Welcome! Quickly calculate your discounted price, including GST and custom settings.
-      </p>
+      </div>
     </div>
 
     <!-- Price and Currency -->
@@ -223,122 +241,118 @@
     </div>
     <div>© 2025 Discount Calculator</div>
   </footer>
-<script>
-  function updateDateTime() {
-    const now = new Date();
-    const formatted = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')} IST`;
-    document.getElementById('liveTime').textContent = formatted;
-  }
-
-  window.onload = function () {
-    updateDateTime();
-    setInterval(updateDateTime, 1000);
-
-    // Auto-hide welcome message after 6 seconds
-    setTimeout(() => {
-      const welcomeMsg = document.getElementById("welcomeMsg");
-      if (welcomeMsg) welcomeMsg.style.display = "none";
-    }, 6000);
-  };
-
-  function getGreeting() {
-    const hour = new Date().getHours();
-    if (hour < 12) return "morning";
-    if (hour < 18) return "afternoon";
-    return "evening";
-  }
-
-  function handleGSTChange() {
-    const gstType = document.getElementById("gstSelect").value;
-    document.getElementById("customGstDiv").style.display = gstType === "custom" ? "block" : "none";
-  }
-
-  function calculate() {
-    const price = parseFloat(document.getElementById("price").value);
-    const discount = parseFloat(document.getElementById("discount").value);
-    const currency = document.getElementById("currency").value;
-    let gst = 0;
-
-    const gstType = document.getElementById("gstSelect").value;
-    if (gstType === "18") gst = 18;
-    else if (gstType === "custom") {
-      const customGst = parseFloat(document.getElementById("customGst").value);
-      if (!isNaN(customGst)) gst = customGst;
+  <script>
+    function updateDateTime() {
+      const now = new Date();
+      const formatted = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')} IST`;
+      document.getElementById('liveTime').textContent = formatted;
     }
 
-    if (isNaN(price) || isNaN(discount)) {
-      alert("Please enter valid price and discount.");
-      return;
+    window.onload = function () {
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
+    };
+
+    function getGreeting() {
+      const hour = new Date().getHours();
+      if (hour < 12) return "morning";
+      if (hour < 18) return "afternoon";
+      return "evening";
     }
 
-    const discountAmount = (price * discount) / 100;
-    let discountedPrice = price - discountAmount;
-
-    let gstAmount = 0;
-    if (gst > 0) {
-      gstAmount = (discountedPrice * gst) / 100;
-      discountedPrice += gstAmount;
+    function handleGSTChange() {
+      const gstType = document.getElementById("gstSelect").value;
+      document.getElementById("customGstDiv").style.display = gstType === "custom" ? "block" : "none";
     }
 
-    const resultDiv = document.getElementById("result");
-    resultDiv.innerHTML = `
-      <div style="font-size: 1.1rem; margin-bottom: 0.5rem;"><span style="font-size: 1.3rem;">✅</span> <strong>Here is your result:</strong></div>
-      <strong>Original Price:</strong> ${currency}${price.toFixed(2)}<br>
-      <strong>Discount (${discount}%):</strong> -${currency}${discountAmount.toFixed(2)}<br>
-      <strong>GST${gst > 0 ? ` (${gst}%)` : ""}:</strong> ${currency}${gstAmount.toFixed(2)}<br><br>
-      <strong>Final Price:</strong> ${currency}${discountedPrice.toFixed(2)}<br><br>
-      <div class="thankyou-message">
-        <span style="font-size: 1.4rem;">🌟</span>
-        <p style="margin: 0;">Thank you and have a great ${getGreeting()}!</p>
-      </div>
-    `;
-    resultDiv.style.display = "block";
-  }
+    function calculate() {
+      const price = parseFloat(document.getElementById("price").value);
+      const discount = parseFloat(document.getElementById("discount").value);
+      const currency = document.getElementById("currency").value;
+      let gst = 0;
 
-  function resetForm() {
-    document.getElementById("price").value = "";
-    document.getElementById("discount").value = "";
-    document.getElementById("gstSelect").value = "none";
-    document.getElementById("customGst").value = "";
-    document.getElementById("customGstDiv").style.display = "none";
-    document.getElementById("result").style.display = "none";
-    document.getElementById("welcomeMsg").style.display = "block";
+      const gstType = document.getElementById("gstSelect").value;
+      if (gstType === "18") gst = 18;
+      else if (gstType === "custom") {
+        const customGst = parseFloat(document.getElementById("customGst").value);
+        if (!isNaN(customGst)) gst = customGst;
+      }
 
-    // Re-hide after another 6s
-    setTimeout(() => {
-      const welcomeMsg = document.getElementById("welcomeMsg");
-      if (welcomeMsg) welcomeMsg.style.display = "none";
-    }, 6000);
-  }
+      if (isNaN(price) || isNaN(discount)) {
+        alert("Please enter valid price and discount.");
+        return;
+      }
 
-  function shareResult() {
-    const result = document.getElementById("result").innerText;
-    if (navigator.share) {
-      navigator.share({
-        title: "Discount Calculator",
-        text: result,
+      const discountAmount = (price * discount) / 100;
+      let discountedPrice = price - discountAmount;
+
+      let gstAmount = 0;
+      if (gst > 0) {
+        gstAmount = (discountedPrice * gst) / 100;
+        discountedPrice += gstAmount;
+      }
+
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = `
+        <div style="font-size: 1.1rem; margin-bottom: 0.5rem;"><span style="font-size: 1.3rem;">✅</span> <strong>Here is your result:</strong></div>
+        <strong>Original Price:</strong> ${currency}${price.toFixed(2)}<br>
+        <strong>Discount (${discount}%):</strong> -${currency}${discountAmount.toFixed(2)}<br>
+        <strong>GST${gst > 0 ? ` (${gst}%)` : ""}:</strong> ${currency}${gstAmount.toFixed(2)}<br><br>
+        <strong>Final Price:</strong> ${currency}${discountedPrice.toFixed(2)}<br><br>
+        <div class="animated-message success-message" id="thankYouMessage">
+          <span class="icon">🌟</span>
+          <div class="text">Thank you and have a great ${getGreeting()}!</div>
+        </div>
+      `;
+      resultDiv.style.display = "block";
+
+      // Auto-hide thank you message after 5 seconds
+      setTimeout(() => {
+        const thankYou = document.getElementById("thankYouMessage");
+        if (thankYou) {
+          thankYou.style.opacity = '0';
+          thankYou.style.transition = 'opacity 1s ease-out';
+          setTimeout(() => thankYou.remove(), 1000);
+        }
+      }, 5000);
+    }
+
+    function resetForm() {
+      document.getElementById("price").value = "";
+      document.getElementById("discount").value = "";
+      document.getElementById("gstSelect").value = "none";
+      document.getElementById("customGst").value = "";
+      document.getElementById("customGstDiv").style.display = "none";
+      document.getElementById("result").style.display = "none";
+    }
+
+    function shareResult() {
+      const result = document.getElementById("result").innerText;
+      if (navigator.share) {
+        navigator.share({
+          title: "Discount Calculator",
+          text: result,
+        });
+      } else {
+        alert("Sharing not supported on this browser.");
+      }
+    }
+
+    // Hide welcome message on focus
+    ['price', 'discount', 'customGst'].forEach(id => {
+      document.getElementById(id).addEventListener('focus', () => {
+        const welcome = document.getElementById("welcomeMsg");
+        if (welcome) welcome.style.display = 'none';
       });
-    } else {
-      alert("Sharing not supported on this browser.");
-    }
-  }
+    });
 
-  // Hide welcome message on input focus
-  ['price', 'discount', 'customGst'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.addEventListener('focus', () => {
-        document.getElementById("welcomeMsg").style.display = 'none';
-      });
-    }
-  });
-
-  document.addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      calculate();
-    }
-  });
-</script>
-
-
+    // Trigger calculation on Enter key
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        calculate();
+      }
+    });
+  </script>
+</body>
+</html>
