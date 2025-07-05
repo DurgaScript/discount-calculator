@@ -37,7 +37,7 @@
     }
 
     .form-group {
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
 
     label {
@@ -56,7 +56,7 @@
 
     .row {
       display: flex;
-      gap: 0;
+      gap: 1rem;
     }
 
     .row .half {
@@ -66,7 +66,7 @@
     .btn-group {
       display: flex;
       justify-content: space-between;
-      gap: 0.5rem;
+      gap: 1rem;
       margin-top: 1rem;
     }
 
@@ -98,12 +98,12 @@
       margin-top: 5px;
     }
 
-    .welcome-message {
+    .welcome-message, .thankyou-message {
       background-color: #f0f4ff;
       border-left: 5px solid #4f46e5;
       padding: 1rem;
       border-radius: 8px;
-      margin-bottom: 1.5rem;
+      margin: 1.5rem 0;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -111,10 +111,10 @@
     }
 
     .thankyou-message {
+      background-color: #e7fbe9;
+      border-left: 5px solid #10b981;
       font-weight: bold;
-      color: green;
-      margin-top: 1rem;
-      animation: fadeIn 1.2s ease-in-out;
+      color: #065f46;
     }
 
     @keyframes fadeIn {
@@ -214,9 +214,9 @@
   <!-- Footer -->
   <footer>
     <div style="margin-bottom: 5px;">
-      <a href="#">About</a> |
-      <a href="#">Privacy Policy</a> |
-      <a href="#">Terms of Use</a>
+      <a href="about.html">About</a> |
+      <a href="privacy.html">Privacy Policy</a> |
+      <a href="terms.html">Terms of Use</a>
     </div>
     <div>© 2025 Discount Calculator</div>
   </footer>
@@ -305,14 +305,12 @@
       }
     }
 
-    // Hide welcome message when user interacts
     ['price', 'discount', 'customGst'].forEach(id => {
       document.getElementById(id).addEventListener('focus', () => {
         document.getElementById("welcomeMsg").style.display = 'none';
       });
     });
 
-    // Enter key triggers calculate
     document.addEventListener("keydown", function (event) {
       if (event.key === "Enter") {
         event.preventDefault();
