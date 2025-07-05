@@ -37,7 +37,7 @@
     }
 
     .form-group {
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
     }
 
     label {
@@ -56,7 +56,7 @@
 
     .row {
       display: flex;
-      gap: 0;
+      gap: 0.5rem;
     }
 
     .row .half {
@@ -67,6 +67,7 @@
       display: flex;
       justify-content: space-between;
       gap: 0.5rem;
+      margin-top: 1rem;
     }
 
     button {
@@ -109,6 +110,12 @@
       animation: fadeIn 1.2s ease-in-out;
     }
 
+    .result-heading {
+      color: green;
+      font-weight: bold;
+      margin-bottom: 0.8rem;
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -136,11 +143,13 @@
       <label for="price">Original Price:</label>
       <div class="row">
         <div class="half"><input type="number" id="price" /></div>
-        <div class="half"><select id="currency">
-          <option value="₹">INR (₹)</option>
-          <option value="$">USD ($)</option>
-          <option value="€">EUR (€)</option>
-        </select></div>
+        <div class="half">
+          <select id="currency">
+            <option value="₹">INR (₹)</option>
+            <option value="$">USD ($)</option>
+            <option value="€">EUR (€)</option>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -173,15 +182,14 @@
     <!-- Result -->
     <div id="result" class="result-box" style="display: none;"></div>
 
-    <!-- Button Group -->
+    <!-- Button Group (Reordered) -->
     <div class="btn-group">
-      <button onclick="resetForm()">Reset</button>
       <button onclick="window.print()">Print</button>
+      <button onclick="resetForm()">Reset</button>
       <button onclick="shareResult()">Share</button>
     </div>
   </div>
 
-  <!-- Footer -->
   <footer style="text-align:center; font-size: 14px; margin-top: 50px; padding: 10px; color: #666;">
     © 2025 Discount Calculator
   </footer>
@@ -239,11 +247,11 @@
 
       const resultDiv = document.getElementById("result");
       resultDiv.innerHTML = `
+        <div class="result-heading">✅ Here is your result.</div>
         <strong>Original Price:</strong> ${currency}${price.toFixed(2)}<br>
         <strong>Discount (${discount}%):</strong> -${currency}${discountAmount.toFixed(2)}<br>
         <strong>${gst > 0 ? "GST Applied (" + gst + "%):" : "GST:"}</strong> ${currency}${gstAmount.toFixed(2)}<br><br>
         <strong>Final Price:</strong> ${currency}${discountedPrice.toFixed(2)}<br><br>
-        <div style="color: green; font-weight: bold;">✅ Here is your result.</div>
         <div class="thankyou-message">🌟 Thank you and have a great ${getGreeting()}!</div>
       `;
       resultDiv.style.display = "block";
@@ -270,7 +278,7 @@
       }
     }
 
-    // 🧠 Hide welcome message on input
+    // Hide welcome message on input
     ['price', 'discount', 'customGst'].forEach(id => {
       document.getElementById(id).addEventListener('input', () => {
         document.getElementById("welcomeMsg").style.display = 'none';
