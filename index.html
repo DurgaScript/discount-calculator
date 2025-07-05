@@ -280,7 +280,7 @@
 
     // Hide welcome message on input
     ['price', 'discount', 'customGst'].forEach(id => {
-      document.getElementById(id).addEventListener('input', () => {
+      const el = document.getElementById(id);
         document.getElementById("welcomeMsg").style.display = 'none';
       });
     });
