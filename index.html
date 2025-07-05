@@ -206,6 +206,13 @@
     <!-- Result Display -->
     <div id="result" class="result-box" style="display: none;"></div>
 
+    <!-- Thank You Message -->
+    <div class="thankyou-message" id="thankYouMsg" style="display: none; opacity: 0; transition: opacity 0.5s ease;">
+      <span style="font-size: 1.4rem;">🌟</span>
+      <p style="margin: 0;">Thank you and have a great <span id="greetingTime"></span>!</p>
+    </div>
+
+
     <!-- Buttons -->
     <div class="btn-group">
       <button onclick="resetForm()">Reset</button>
@@ -233,12 +240,6 @@
   window.onload = function () {
     updateDateTime();
     setInterval(updateDateTime, 1000);
-
-    // Auto-hide welcome message after 6 seconds
-    setTimeout(() => {
-      const welcomeMsg = document.getElementById("welcomeMsg");
-      if (welcomeMsg) welcomeMsg.style.display = "none";
-    }, 6000);
   };
 
   function getGreeting() {
@@ -287,12 +288,22 @@
       <strong>Discount (${discount}%):</strong> -${currency}${discountAmount.toFixed(2)}<br>
       <strong>GST${gst > 0 ? ` (${gst}%)` : ""}:</strong> ${currency}${gstAmount.toFixed(2)}<br><br>
       <strong>Final Price:</strong> ${currency}${discountedPrice.toFixed(2)}<br><br>
-      <div class="thankyou-message">
-        <span style="font-size: 1.4rem;">🌟</span>
-        <p style="margin: 0;">Thank you and have a great ${getGreeting()}!</p>
-      </div>
     `;
     resultDiv.style.display = "block";
+
+    // Show thank you message
+    const greeting = getGreeting();
+    const thankYouMsg = document.getElementById("thankYouMsg");
+    document.getElementById("greetingTime").textContent = greeting;
+    thankYouMsg.style.display = "flex";
+    thankYouMsg.style.opacity = "1";
+
+    setTimeout(() => {
+      thankYouMsg.style.opacity = "0";
+      setTimeout(() => {
+        thankYouMsg.style.display = "none";
+      }, 500);
+    }, 4000);
   }
 
   function resetForm() {
@@ -302,13 +313,7 @@
     document.getElementById("customGst").value = "";
     document.getElementById("customGstDiv").style.display = "none";
     document.getElementById("result").style.display = "none";
-    document.getElementById("welcomeMsg").style.display = "block";
-
-    // Re-hide after another 6s
-    setTimeout(() => {
-      const welcomeMsg = document.getElementById("welcomeMsg");
-      if (welcomeMsg) welcomeMsg.style.display = "none";
-    }, 6000);
+    document.getElementById("thankYouMsg").style.display = "none";
   }
 
   function shareResult() {
@@ -323,14 +328,10 @@
     }
   }
 
-  // Hide welcome message on input focus
   ['price', 'discount', 'customGst'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.addEventListener('focus', () => {
-        document.getElementById("welcomeMsg").style.display = 'none';
-      });
-    }
+    document.getElementById(id).addEventListener('focus', () => {
+      document.getElementById("welcomeMsg").style.display = 'none';
+    });
   });
 
   document.addEventListener("keydown", function (event) {
@@ -341,3 +342,4 @@
   });
 </script>
 
+  
