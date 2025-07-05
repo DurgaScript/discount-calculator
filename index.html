@@ -116,36 +116,37 @@
       </p>
     </div>
 
-    <!-- Currency + Original Price -->
-    <div class="form-group">
-      <label for="price">Original Price:</label>
-      <div class="row">
-        <select id="currency">
-          <option value="₹">INR (₹)</option>
-          <option value="$">USD ($)</option>
-          <option value="€">EUR (€)</option>
-        </select>
-        <input type="number" id="price" placeholder="Enter original price" />
-      </div>
-    </div>
+    <!-- Original Price + Currency -->
+<div class="form-group">
+  <label for="price">Original Price:</label>
+  <div class="row" style="display: flex; gap: 1rem;">
+    <input type="number" id="price" placeholder="Enter original price" style="flex: 0 0 60%;" />
+    <select id="currency" style="flex: 0 0 40%;">
+      <option value="₹">INR (₹)</option>
+      <option value="$">USD ($)</option>
+      <option value="€">EUR (€)</option>
+    </select>
+  </div>
+</div>
 
-    <!-- Discount + GST -->
-    <div class="form-group">
-      <div class="row">
-        <div style="flex: 1;">
-          <label for="discount">Discount (%):</label>
-          <input type="number" id="discount" placeholder="e.g. 20 for 20%" />
-        </div>
-        <div style="flex: 1;">
-          <label for="gstSelect">GST:</label>
-          <select id="gstSelect" onchange="handleGSTChange()">
-            <option value="none">No GST</option>
-            <option value="18">Apply 18% GST</option>
-            <option value="custom">Custom GST</option>
-          </select>
-        </div>
-      </div>
+    <!-- Discount + GST (Equal Width) -->
+<div class="form-group">
+  <div class="row" style="display: flex; gap: 1rem;">
+    <div style="flex: 1;">
+      <label for="discount">Discount (%):</label>
+      <input type="number" id="discount" placeholder="e.g. 20 for 20%" />
     </div>
+    <div style="flex: 1;">
+      <label for="gstSelect">GST:</label>
+      <select id="gstSelect" onchange="handleGSTChange()">
+        <option value="none">No GST</option>
+        <option value="18">Apply 18% GST</option>
+        <option value="custom">Custom GST</option>
+      </select>
+    </div>
+  </div>
+</div>
+
 
     <!-- Custom GST -->
     <div class="form-group" id="customGstDiv" style="display: none;">
