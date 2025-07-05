@@ -21,7 +21,7 @@
     }
 
     .container {
-      max-width: 600px;
+      max-width: 650px;
       margin: 2rem auto;
       background: white;
       padding: 2rem;
@@ -57,12 +57,8 @@
       gap: 1rem;
     }
 
-    .row select {
-      width: 30%;
-    }
-
-    .row input {
-      width: 70%;
+    .row select, .row input {
+      width: 100%;
     }
 
     .btn-group {
@@ -136,22 +132,25 @@
       </div>
     </div>
 
-    <!-- Discount -->
+    <!-- Discount + GST in one row -->
     <div class="form-group">
-      <label for="discount">Discount (%):</label>
-      <input type="number" id="discount" placeholder="e.g. 20 for 20%" />
+      <div class="row">
+        <div style="flex: 1;">
+          <label for="discount">Discount (%):</label>
+          <input type="number" id="discount" placeholder="e.g. 20 for 20%" />
+        </div>
+        <div style="flex: 1;">
+          <label for="gstSelect">GST:</label>
+          <select id="gstSelect" onchange="handleGSTChange()" style="width: 100%;">
+            <option value="none">No GST</option>
+            <option value="18">Apply 18% GST</option>
+            <option value="custom">Custom GST</option>
+          </select>
+        </div>
+      </div>
     </div>
 
-    <!-- GST Section -->
-    <div class="form-group">
-      <label for="gstSelect">GST:</label>
-      <select id="gstSelect" onchange="handleGSTChange()">
-        <option value="none">No GST</option>
-        <option value="18">Apply 18% GST</option>
-        <option value="custom">Custom GST</option>
-      </select>
-    </div>
-
+    <!-- Custom GST Input -->
     <div class="form-group" id="customGstDiv" style="display: none;">
       <label for="customGst">Enter Custom GST %:</label>
       <input type="number" id="customGst" placeholder="e.g. 12" />
@@ -159,7 +158,7 @@
 
     <!-- Calculate Button -->
     <div class="form-group">
-      <button onclick="calculate()">Calculate</button>
+      <button style="width: 100%;" onclick="calculate()">Calculate</button>
     </div>
 
     <!-- Result -->
