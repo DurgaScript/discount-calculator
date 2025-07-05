@@ -279,7 +279,10 @@
         <strong>Discount (${discount}%):</strong> -${currency}${discountAmount.toFixed(2)}<br>
         <strong>GST${gst > 0 ? ` (${gst}%)` : ""}:</strong> ${currency}${gstAmount.toFixed(2)}<br><br>
         <strong>Final Price:</strong> ${currency}${discountedPrice.toFixed(2)}<br><br>
-        <div class="thankyou-message">🌟 Thank you and have a great ${getGreeting()}!</div>
+        <div class="thankyou-message">
+          <span style="font-size: 1.4rem;">🌟</span>
+          <p style="margin: 0;">Thank you and have a great ${getGreeting()}!</p>
+        </div>
       `;
       resultDiv.style.display = "block";
     }
