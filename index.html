@@ -51,20 +51,11 @@
       border: 1px solid #ccc;
       border-radius: 8px;
       width: 100%;
-      box-sizing: border-box;
     }
 
     .row {
       display: flex;
       gap: 1rem;
-    }
-
-    .row .original-price {
-      flex: 3;
-    }
-
-    .row .currency-select {
-      flex: 2;
     }
 
     .row .half {
@@ -129,14 +120,14 @@
       </p>
     </div>
 
-    <!-- Original Price + Currency -->
+    <!-- Original Price & Currency -->
     <div class="form-group">
       <label for="price">Original Price:</label>
       <div class="row">
-        <div class="original-price">
+        <div class="half">
           <input type="number" id="price" placeholder="Enter original price" />
         </div>
-        <div class="currency-select">
+        <div class="half">
           <select id="currency">
             <option value="₹">INR (₹)</option>
             <option value="$">USD ($)</option>
@@ -146,7 +137,7 @@
       </div>
     </div>
 
-    <!-- Discount + GST -->
+    <!-- Discount & GST -->
     <div class="form-group">
       <div class="row">
         <div class="half">
@@ -181,7 +172,7 @@
     <!-- Button Group -->
     <div class="btn-group">
       <button onclick="resetForm()">Reset</button>
-      <button onclick="downloadPDF()">Download</button>
+      <button onclick="window.print()">Print</button>
       <button onclick="shareResult()">Share</button>
     </div>
   </div>
@@ -244,13 +235,11 @@
         <strong>Discount (${discount}%):</strong> -${currency}${discountAmount.toFixed(2)}<br>
         <strong>${gst > 0 ? "GST Applied (" + gst + "%):" : "GST:"}</strong> ${currency}${gstAmount.toFixed(2)}<br><br>
         <strong>Final Price:</strong> ${currency}${discountedPrice.toFixed(2)}<br><br>
-        ${discount > 30 ? '<span style="color:green;">🎉 Great deal!</span>' : ''}
+        <div style="margin-top: 10px; font-weight: bold; color: green;">
+          ✅ Here is your result. Thank you for using the calculator!
+        </div>
       `;
       resultDiv.style.display = "block";
-
-      setTimeout(() => {
-        alert("✅ Thank you! Your result is ready.");
-      }, 500);
     }
 
     function resetForm() {
@@ -272,15 +261,6 @@
       } else {
         alert("Sharing not supported on this browser.");
       }
-    }
-
-    function downloadPDF() {
-      const resultText = document.getElementById("result").innerText;
-      const blob = new Blob([resultText], { type: "application/pdf" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "discount-result.pdf";
-      link.click();
     }
   </script>
 </body>
